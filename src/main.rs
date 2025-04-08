@@ -1,4 +1,5 @@
 use std::io;
+use std::env;
 
 use crossterm::event::{self, Event, KeyCode};
 use ratatui::backend::Backend;
@@ -31,11 +32,15 @@ fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<
 }
 
 fn main() -> io::Result<()> {
-    let mut terminal = ratatui::init();
+    let args: Vec<String> = env::args().collect();
 
-    let mut app = App::random(0, 0);
-    let app_result = run_app(&mut terminal, &mut app);
-
-    ratatui::restore();
-    app_result
+    if args.len() > 1 && args[1] == "--ssh-server" {
+        todo!()
+    } else {
+        let mut terminal = ratatui::init();
+        let mut app = App::random(0, 0);
+        let app_result = run_app(&mut terminal, &mut app);
+        ratatui::restore();
+        app_result
+    }
 }
