@@ -154,6 +154,10 @@ impl Handler for AppServer {
     async fn auth_publickey(&mut self, _: &str, _: &PublicKey) -> Result<Auth, Self::Error> {
         Ok(Auth::Accept)
     }
+    
+    async fn auth_none(&mut self, _: &str) -> Result<Auth, Self::Error> {
+        Ok(Auth::Accept)
+    }
 
     async fn data(
         &mut self,
