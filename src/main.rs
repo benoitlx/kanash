@@ -11,15 +11,53 @@ use ratatui::{
     DefaultTerminal, Frame,
 };
 
-#[derive(Debug, Default)]
+use wana_kana::ConvertJapanese;
+
+use rand::Rng;
+
+#[derive(Debug)]
 pub struct App {
     shown: u16,
     correct: u16,
     exit: bool,
     input: String,
+    current_kana: String,
+    index: usize,
+}
+
+fn get_hiragana() -> String {
+    let mut rng = rand::rng();
+
+    String::from_utf16(&[rng.random_range(12353..12438)]).expect("error")
+}
+
+fn get_kana() -> String {
+    get_hiragana()
 }
 
 impl App {
+    pub fn new(kana: String) -> App {
+        App {
+            shown: 0,
+            correct: 0,
+            exit: false,
+            input: String::new(),
+            current_kana: kana, 
+            index: 0,
+        }
+    }
+
+    pub fn random(s: u16, c: u16) -> App {
+        App {
+            shown: s,
+            correct: c,
+            exit: false,
+            input: String::new(),
+            current_kana: get_kana(),
+            index: 0,
+        }
+    }
+
     pub fn run(&mut self, terminal: &mut DefaultTerminal) -> io::Result<()> {
         while !self.exit {
             terminal.draw(|frame| self.draw(frame))?;
@@ -47,13 +85,24 @@ impl App {
     fn handle_key_event(&mut self, key_event: KeyEvent) {
         match key_event.code {
             KeyCode::Esc => self.exit = true,
-            KeyCode::Left => self.shown += 1, 
-            KeyCode::Right => self.shown -= 1,
             KeyCode::Backspace => {self.input.pop();}
-            KeyCode::Char(chr_to_push) => self.input.push(chr_to_push),
+            KeyCode::Char(chr_to_push) => self.check_char(chr_to_push), 
             _ => {}
         }
     }
+
+    fn check_char(&mut self, c: char) {
+        self.input.push(c);
+
+        if self.input == self.current_kana.to_romaji() {
+            self.correct += 1;
+            self.shown += 1;
+            self.index = 0;
+            self.input = String::new();
+            self.current_kana = get_kana();
+        }
+    }
+
 }
 
 impl Widget for &App {
@@ -84,8 +133,8 @@ impl Widget for &App {
             .title_bottom(commands.centered())
             .border_set(border::THICK);
 
-        let kana = Line::from("そこで犬が寝ている").centered();
-        let romaji = Line::from("romaji").centered().red();
+        let kana = Line::from(self.current_kana.clone()).centered();
+        let romaji = Line::from(self.current_kana.to_romaji()).centered().red();
         let user_input = Line::from(self.input.clone());
 
 
@@ -98,7 +147,7 @@ impl Widget for &App {
 
 fn main() -> io::Result<()> {
     let mut terminal = ratatui::init();
-    let app_result = App::default().run(&mut terminal);
+    let app_result = App::random(0, 0).run(&mut terminal);
 
     ratatui::restore();
     app_result
