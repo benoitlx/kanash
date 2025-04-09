@@ -1,4 +1,5 @@
 use crate::app::App;
+use crate::app::get_hiragana;
 use wana_kana::ConvertJapanese;
 
 use ratatui::{
@@ -39,10 +40,17 @@ pub fn ui(frame: &mut Frame, app: &App) {
         .border_set(border::THICK);
 
     let kana = Line::from(app.current_kana.clone()).centered();
-    let romaji = Line::from(app.current_kana.to_romaji()).centered().red();
-    let user_input = Line::from(app.input.clone());
 
-    let p = Paragraph::new(vec![kana, romaji, user_input])
+    let romaji = if app.display_answer {
+        Line::from(app.current_kana.to_romaji()).centered().red()
+    } else {
+        Line::from("\n")
+    };
+    
+    let user_input = Line::from(app.input.clone());
+    let kana_list = Line::from(get_hiragana());
+
+    let p = Paragraph::new(vec![kana, romaji, user_input, kana_list])
         .centered()
         .block(block);
 

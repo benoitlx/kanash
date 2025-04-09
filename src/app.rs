@@ -25,6 +25,7 @@ pub struct App {
     pub input: String,
     pub current_kana: String,
     pub index: usize,
+    pub display_answer: bool,
 }
 
 impl App {
@@ -35,6 +36,7 @@ impl App {
             input: String::new(),
             current_kana: random_kana(),
             index: 0,
+            display_answer: false,
         }
     }
 
@@ -51,6 +53,6 @@ impl App {
     }
 
     pub fn reveal_roma(&mut self) {
-        todo!()
+        self.display_answer = true;
     }
 }
