@@ -6,7 +6,7 @@ use ratatui::{
     style::Stylize,
     symbols::border,
     text::Line,
-    widgets::{Block, Paragraph},
+    widgets::{Block, Paragraph, Wrap},
     Frame,
 };
 
@@ -52,7 +52,8 @@ pub fn ui(frame: &mut Frame, app: &App) {
 
     let p = Paragraph::new(vec![kana, romaji, user_input, kana_list])
         .centered()
-        .block(block);
+        .block(block)
+        .wrap(Wrap { trim: true });
 
     frame.render_widget(p, frame.area());
 }
