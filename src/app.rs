@@ -44,7 +44,11 @@ impl App {
         self.input.push(c);
 
         if self.input == self.current_kana.to_romaji() {
-            self.correct += 1;
+            if self.display_answer {
+                self.display_answer = false;
+            } else {
+                self.correct += 1;
+            }
             self.shown += 1;
             self.index = 0;
             self.input = String::new();
@@ -54,5 +58,6 @@ impl App {
 
     pub fn reveal_roma(&mut self) {
         self.display_answer = true;
+        self.input = String::new();
     }
 }
