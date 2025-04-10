@@ -1,15 +1,15 @@
-use std::io;
 use std::env;
+use std::io;
 
 use crossterm::event::{self, Event, KeyCode};
 use ratatui::backend::{Backend, CrosstermBackend};
-use ratatui::{Terminal, TerminalOptions, Viewport};
 use ratatui::layout::Rect;
+use ratatui::{Terminal, TerminalOptions, Viewport};
 
 use russh::keys::ssh_key::PublicKey;
+use russh::keys::Algorithm;
 use russh::server::*;
 use russh::{Channel, ChannelId, Pty};
-use russh::keys::Algorithm;
 use tokio::sync::mpsc::{unbounded_channel, UnboundedSender};
 use tokio::sync::Mutex;
 
@@ -91,10 +91,7 @@ impl AppServer {
                 // tokio::time::sleep(tokio::time::Duration::from_secs(1)).await;
 
                 for (_, (terminal, app)) in clients.lock().await.iter_mut() {
-
-                    terminal
-                        .draw(|f| ui(f, app))
-                        .unwrap();
+                    terminal.draw(|f| ui(f, app)).unwrap();
                 }
             }
         });
@@ -103,9 +100,7 @@ impl AppServer {
             inactivity_timeout: Some(std::time::Duration::from_secs(3600)),
             auth_rejection_time: std::time::Duration::from_secs(3),
             auth_rejection_time_initial: Some(std::time::Duration::from_secs(0)),
-            keys: vec![
-                russh::keys::PrivateKey::random(&mut OsRng, Algorithm::Ed25519).unwrap(),
-            ],
+            keys: vec![russh::keys::PrivateKey::random(&mut OsRng, Algorithm::Ed25519).unwrap()],
             nodelay: true,
             ..Default::default()
         };
@@ -154,7 +149,7 @@ impl Handler for AppServer {
     async fn auth_publickey(&mut self, _: &str, _: &PublicKey) -> Result<Auth, Self::Error> {
         Ok(Auth::Accept)
     }
-    
+
     async fn auth_none(&mut self, _: &str) -> Result<Auth, Self::Error> {
         Ok(Auth::Accept)
     }
