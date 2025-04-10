@@ -1,5 +1,5 @@
 use crate::app::App;
-use crate::app::get_hiragana;
+use crate::ja_helper::get_hiragana;
 use wana_kana::ConvertJapanese;
 
 use ratatui::{
