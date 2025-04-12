@@ -1,13 +1,7 @@
 use crate::components::helper::ja::{get_hiragana, random_kana};
-use ratatui::{
-    crossterm::event::{self, Event, KeyCode},
-    symbols::border,
-    text::Line,
-    widgets::{Block, Paragraph, Wrap},
-    Frame,
-    style::Stylize,
-};
 use wana_kana::ConvertJapanese;
+
+use super::*;
 
 pub struct KanaModel {
     shown: u32,
@@ -34,8 +28,8 @@ pub enum KanaMessage {
 
 impl KanaModel {
     /// Create a new kana model
-    pub fn new() -> KanaModel {
-        KanaModel {
+    pub fn new() -> Self {
+        Self {
             shown: 0,
             correct: 0,
             input: String::new(),
