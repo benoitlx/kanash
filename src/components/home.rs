@@ -14,10 +14,8 @@ pub struct HomeModel {
     pub exit: bool,
 }
 
+#[derive(Debug, PartialEq, Eq)]
 pub enum HomeMessage {
-    /// Exit the app
-    Back,
-
     /// Launch a Page
     Enter,
 
@@ -25,8 +23,8 @@ pub enum HomeMessage {
     Down,
 }
 
-impl HomeModel {
-    pub fn new() -> Self {
+impl Components for HomeModel {
+    fn new() -> Self {
         let mut init_state = ListState::default();
         init_state.select_first();
 
@@ -42,13 +40,13 @@ impl HomeModel {
     }
 
     /// Handle Event (Mostly convert key event to message)
-    pub fn handle_event(&self) -> Option<HomeMessage> {
+    fn handle_event(&self) -> Option<Message> {
         if let Event::Key(key) = event::read().unwrap() {
             match key.code {
-                KeyCode::Esc => Some(HomeMessage::Back),
-                KeyCode::Enter => Some(HomeMessage::Enter),
-                KeyCode::Char('j') | KeyCode::Down => Some(HomeMessage::Down),
-                KeyCode::Char('k') | KeyCode::Up => Some(HomeMessage::Up),
+                KeyCode::Esc => Some(Message::Back),
+                KeyCode::Enter => Some(Message::Home(HomeMessage::Enter)),
+                KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
+                KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
                 _ => None,
             }
         } else {
@@ -56,23 +54,26 @@ impl HomeModel {
         }
     }
 
-    pub fn update(&mut self, msg: HomeMessage) -> Option<HomeMessage> {
-        match msg {
-            HomeMessage::Back => {
+    fn update(&mut self, msg: Message) -> Option<Message> {
+        if let Message::Home(home_msg) = msg {
+            match home_msg {
+                HomeMessage::Down => {
+                    self.state.select_next();
+                }
+                HomeMessage::Up => {
+                    self.state.select_previous();
+                }
+                HomeMessage::Enter => {}
+            }
+        } else {
+            if msg == Message::Back {
                 self.exit = true;
             }
-            HomeMessage::Down => {
-                self.state.select_next();
-            }
-            HomeMessage::Up => {
-                self.state.select_previous();
-            }
-            HomeMessage::Enter => {}
         }
         None
     }
 
-    pub fn view(&mut self, frame: &mut Frame) {
+    fn view(&mut self, frame: &mut Frame) {
         let n_page: u16 = self.page_list.len().try_into().unwrap();
         let [_, main_area, _] = Layout::vertical([
             Constraint::Min(0),

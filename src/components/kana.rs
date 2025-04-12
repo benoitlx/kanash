@@ -12,12 +12,10 @@ pub struct KanaModel {
     pub exit: bool,
 }
 
+#[derive(Debug, PartialEq, Eq)]
 pub enum KanaMessage {
     /// reveal the answer
     Answer,
-
-    /// go back to the main menu
-    Back,
 
     /// When the user is typing
     TypingRoma(char),
@@ -26,9 +24,9 @@ pub enum KanaMessage {
     DeleteRoma,
 }
 
-impl KanaModel {
+impl Components for KanaModel {
     /// Create a new kana model
-    pub fn new() -> Self {
+    fn new() -> Self {
         Self {
             shown: 0,
             correct: 0,
@@ -40,13 +38,13 @@ impl KanaModel {
     }
 
     /// Handle Event (Mostly convert key event to message)
-    pub fn handle_event(&self) -> Option<KanaMessage> {
+    fn handle_event(&self) -> Option<Message> {
         if let Event::Key(key) = event::read().unwrap() {
             match key.code {
-                KeyCode::Esc => Some(KanaMessage::Back),
-                KeyCode::Backspace => Some(KanaMessage::DeleteRoma),
-                KeyCode::Char(' ') => Some(KanaMessage::Answer),
-                KeyCode::Char(c) => Some(KanaMessage::TypingRoma(c)),
+                KeyCode::Esc => Some(Message::Back),
+                KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
+                KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
+                KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
                 _ => None,
             }
         } else {
@@ -54,37 +52,40 @@ impl KanaModel {
         }
     }
 
-    pub fn update(&mut self, msg: KanaMessage) -> Option<KanaMessage> {
-        match msg {
-            KanaMessage::Back => {
-                self.exit = true;
-            }
-            KanaMessage::TypingRoma(c) => {
-                self.input.push(c);
+    fn update(&mut self, msg: Message) -> Option<Message> {
+        if let Message::Kana(kana_msg) = msg {
+            match kana_msg {
+                KanaMessage::TypingRoma(c) => {
+                    self.input.push(c);
 
-                if self.input == self.current_kana.to_romaji() {
-                    if self.display_answer {
-                        self.display_answer = false;
-                    } else {
-                        self.correct += 1;
+                    if self.input == self.current_kana.to_romaji() {
+                        if self.display_answer {
+                            self.display_answer = false;
+                        } else {
+                            self.correct += 1;
+                        }
+                        self.shown += 1;
+                        self.input = String::new();
+                        self.current_kana = random_kana();
                     }
-                    self.shown += 1;
+                }
+                KanaMessage::Answer => {
+                    self.display_answer = true;
                     self.input = String::new();
-                    self.current_kana = random_kana();
+                }
+                KanaMessage::DeleteRoma => {
+                    self.input.pop();
                 }
             }
-            KanaMessage::Answer => {
-                self.display_answer = true;
-                self.input = String::new();
-            }
-            KanaMessage::DeleteRoma => {
-                self.input.pop();
+        } else {
+            if msg == Message::Back {
+                self.exit = true;
             }
         }
         None
     }
 
-    pub fn view(&self, frame: &mut Frame) {
+    fn view(&mut self, frame: &mut Frame) {
         let title = Line::from(" Kana TUI ".bold());
         let left_title = Line::from(vec![
             " Shown: ".into(),

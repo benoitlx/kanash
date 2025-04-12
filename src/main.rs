@@ -1,6 +1,7 @@
 mod components;
 use components::kana::KanaModel;
 use components::home::HomeModel;
+use components::Components;
 
 use ratatui::restore;
 
@@ -8,7 +9,7 @@ use ratatui::restore;
 async fn main() {
     let mut terminal = ratatui::init();
 
-    let mut app = HomeModel::new();
+    let mut app = KanaModel::new();
 
     while !app.exit {
         let _ = terminal.draw(|frame| app.view(frame));
