@@ -1,42 +1,23 @@
-use std::io;
+mod components;
+use components::kana::KanaModel;
 
-use crossterm::event::{self, Event, KeyCode};
-use ratatui::backend::Backend;
-use ratatui::Terminal;
-
-mod app;
-mod ja_helper;
-mod ui;
-use crate::{app::App, ui::ui};
-
-fn run_app<B: Backend>(terminal: &mut Terminal<B>, app: &mut App) -> io::Result<()> {
-    loop {
-        terminal.draw(|f| ui(f, app))?;
-
-        if let Event::Key(key) = event::read()? {
-            if key.kind == event::KeyEventKind::Release {
-                continue;
-            }
-
-            match key.code {
-                KeyCode::Esc => return Ok(()),
-                KeyCode::Backspace => {
-                    app.input.pop();
-                }
-                KeyCode::Char(' ') => app.reveal_roma(),
-                KeyCode::Char(c) => app.check_char(c),
-                _ => {}
-            }
-        }
-    }
-}
+use ratatui::restore;
 
 #[tokio::main]
 async fn main() {
     let mut terminal = ratatui::init();
 
-    let mut app = App::random(0, 0);
-    let _app_result = run_app(&mut terminal, &mut app);
+    let mut app = KanaModel::new();
 
-    ratatui::restore();
+    while !app.exit {
+        let _ = terminal.draw(|frame| app.view(frame));
+
+        let mut current_msg = app.handle_event();
+
+        while current_msg.is_some() {
+            current_msg = app.update(current_msg.unwrap());
+        }
+    }
+
+    restore();
 }
