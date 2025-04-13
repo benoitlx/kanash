@@ -1,6 +1,7 @@
 pub mod kana;
 pub mod home;
 pub mod helper;
+pub mod app;
 
 pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
@@ -14,7 +15,7 @@ pub use ratatui::{
 use home::HomeMessage;
 use kana::KanaMessage;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Message {
     /// Go to the previous page or quit the app
     Back,
@@ -28,7 +29,7 @@ pub trait Components {
 
     fn handle_event(&self) -> Option<Message>;
 
-    fn update(&mut self, msg:Message) -> Option<Message>;
+    fn update(&mut self, msg: Message) -> Option<Message>;
 
     fn view(&mut self, frame: &mut Frame);
 }

@@ -3,6 +3,7 @@ use wana_kana::ConvertJapanese;
 
 use super::*;
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct KanaModel {
     shown: u32,
     correct: u32,
@@ -12,7 +13,7 @@ pub struct KanaModel {
     pub exit: bool,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum KanaMessage {
     /// reveal the answer
     Answer,

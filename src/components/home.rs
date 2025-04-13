@@ -8,13 +8,14 @@ use super::*;
 
 const SELECTED_STYLE: Style = Style::new().bg(SLATE.c800).add_modifier(Modifier::BOLD);
 
+#[derive(Debug, PartialEq, Eq)]
 pub struct HomeModel {
     page_list: Vec<String>,
     state: ListState,
     pub exit: bool,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 pub enum HomeMessage {
     /// Launch a Page
     Enter,
