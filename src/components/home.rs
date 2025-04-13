@@ -1,11 +1,7 @@
-use ratatui::{
-    layout::{Constraint, Layout},
-    style::{palette::tailwind::SLATE, Modifier, Style},
-    widgets::{BorderType, Borders, HighlightSpacing, List, ListItem, ListState, Padding},
-};
-
 use super::*;
 
+const KEY_HELPER: &str = " Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Enter> ";
+const TITLE: &str = " KANA SH ";
 const SELECTED_STYLE: Style = Style::new().bg(SLATE.c800).add_modifier(Modifier::BOLD);
 
 #[derive(Debug, PartialEq, Eq)]
@@ -78,13 +74,8 @@ impl Components for HomeModel {
         .areas(frame.area());
 
         let block = Block::new()
-            .title(Line::from(" KANA SH ").red().centered())
-            .title_bottom(
-                Line::from(" Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Enter> ")
-                    .blue()
-                    .bold()
-                    .centered(),
-            )
+            .title(Line::from(TITLE).red().centered())
+            .title_bottom(Line::from(KEY_HELPER).blue().bold().centered())
             .border_type(BorderType::Rounded)
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);
