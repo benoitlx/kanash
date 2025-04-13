@@ -3,6 +3,11 @@ use wana_kana::ConvertJapanese;
 
 use super::*;
 
+const TITLE: &str = " Hiragana ";
+const LEFT_TITLE: &str = " Shown: ";
+const RIGHT_TITLE: &str = " Correct: ";
+const KEY_HELPER: &str = " Main Menu <Esc> | Show answer <Space> ";
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct KanaModel {
     shown: u32,
@@ -81,50 +86,65 @@ impl Components for KanaModel {
     }
 
     fn view(&mut self, frame: &mut Frame) {
-        let title = Line::from(" Kana TUI ".bold());
+        self.learning_zone(frame);
+    }
+}
+
+impl KanaModel {
+    fn background(&mut self, frame: &mut Frame) {
+        todo!()
+    }
+
+    fn learning_zone(&mut self, frame: &mut Frame) {
+        let [_, v_area, _] = Layout::vertical([
+            Constraint::Min(0),
+            Constraint::Length(7),
+            Constraint::Min(0),
+        ])
+        .areas(frame.area());
+
+        let [_, main_area, _] = Layout::horizontal([
+            Constraint::Min(0),
+            Constraint::Length(43),
+            Constraint::Min(0),
+        ])
+        .areas(v_area);
+
         let left_title = Line::from(vec![
-            " Shown: ".into(),
+            LEFT_TITLE.into(),
             self.shown.to_string().yellow(),
             " ".into(),
         ])
         .left_aligned();
+
         let right_title = Line::from(vec![
-            " Correct: ".into(),
+            RIGHT_TITLE.into(),
             self.correct.to_string().yellow(),
             " ".into(),
         ])
         .right_aligned();
 
-        let commands = Line::from(vec![
-            " Quit ".into(),
-            "<Esc> ".blue().bold(),
-            "| Show answer ".into(),
-            "<Space> ".blue().bold(),
-        ]);
-
-        let block = Block::bordered()
-            .title(title.centered())
+        let block = Block::new()
+            .title(Line::from(TITLE).centered())
             .title(left_title)
             .title(right_title)
-            .title_bottom(commands.centered())
-            .border_set(border::THICK);
+            .title_bottom(Line::from(KEY_HELPER).blue().bold().centered())
+            .border_type(BorderType::Rounded)
+            .padding(Padding::vertical(1))
+            .borders(Borders::ALL);
 
-        let kana = Line::from(self.current_kana.clone()).centered();
+        let text = vec![
+            Line::from(self.current_kana.clone()),
+            if self.display_answer {
+                Line::from(self.current_kana.to_romaji()).red()
+            } else {
+                Line::default()
+            },
+            Line::from(self.input.clone()),
+        ];
 
-        let romaji = if self.display_answer {
-            Line::from(self.current_kana.to_romaji()).centered().red()
-        } else {
-            Line::from("\n")
-        };
+        let p = Paragraph::new(text).block(block).centered();
 
-        let user_input = Line::from(self.input.clone());
-        let kana_list = Line::from(get_hiragana());
-
-        let p = Paragraph::new(vec![kana, romaji, user_input, kana_list])
-            .centered()
-            .block(block)
-            .wrap(Wrap { trim: true });
-
-        frame.render_widget(p, frame.area());
+        frame.render_widget(p, main_area);
     }
 }

@@ -8,9 +8,8 @@ pub use ratatui::{
     layout::{Constraint, Layout},
     style::Stylize,
     style::{palette::tailwind::SLATE, Modifier, Style},
-    symbols::border,
     text::Line,
-    widgets::{Block, Paragraph, Wrap},
+    widgets::{Block, Paragraph},
     widgets::{BorderType, Borders, HighlightSpacing, List, ListItem, ListState, Padding},
     Frame,
 };
