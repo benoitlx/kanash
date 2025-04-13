@@ -98,8 +98,7 @@ impl Components for HomeModel {
         let items: Vec<ListItem> = self
             .page_list
             .iter()
-            .enumerate()
-            .map(|(i, item)| ListItem::new(Line::from(item.clone()).centered()))
+            .map(|item| ListItem::new(Line::from(item.clone()).centered()))
             .collect();
 
         let list = List::new(items)
