@@ -10,7 +10,6 @@ pub struct KanaModel {
     input: String,
     current_kana: String,
     display_answer: bool,
-    pub exit: bool,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -34,7 +33,6 @@ impl Components for KanaModel {
             input: String::new(),
             current_kana: random_kana(),
             display_answer: false,
-            exit: false,
         }
     }
 
@@ -77,10 +75,6 @@ impl Components for KanaModel {
                 KanaMessage::DeleteRoma => {
                     self.input.pop();
                 }
-            }
-        } else {
-            if msg == Message::Back {
-                self.exit = true;
             }
         }
         None

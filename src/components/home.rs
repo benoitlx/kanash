@@ -12,7 +12,6 @@ const SELECTED_STYLE: Style = Style::new().bg(SLATE.c800).add_modifier(Modifier:
 pub struct HomeModel {
     page_list: Vec<String>,
     state: ListState,
-    pub exit: bool,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -36,7 +35,6 @@ impl Components for HomeModel {
                 "Learn Both".into(),
             ],
             state: init_state,
-            exit: false,
         }
     }
 
@@ -65,10 +63,6 @@ impl Components for HomeModel {
                     self.state.select_previous();
                 }
                 HomeMessage::Enter => {}
-            }
-        } else {
-            if msg == Message::Back {
-                self.exit = true;
             }
         }
         None
