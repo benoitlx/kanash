@@ -1,5 +1,6 @@
 use crate::components::helper::ja::random_kana;
 use crate::components::helper::rain;
+use crate::components::helper::image;
 use wana_kana::ConvertJapanese;
 
 use super::*;
@@ -91,7 +92,8 @@ impl Components for KanaModel {
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
-        rain::view(frame, elapsed);
+        // rain::view(frame, elapsed);
+        // image::view(frame, "./assets/fuji.jpg".to_string(), frame.area());
         self.learning_zone(frame);
     }
 }

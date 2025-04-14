@@ -41,14 +41,23 @@ fn main() {
             .build();
 
         let _ = terminal.draw(|frame| {
-            let [_, area, _] = Layout::vertical([
+            let [_, area, _, bottom] = Layout::vertical([
                 Constraint::Min(0),
                 Constraint::Length(4),
                 Constraint::Min(0),
+                Constraint::Percentage(10),
             ])
             .areas(frame.area());
 
+            let [_, img_area, _] = Layout::horizontal([
+                Constraint::Min(0),
+                Constraint::Percentage(10),
+                Constraint::Min(0),
+            ])
+            .areas(bottom);
+
             frame.render_widget(p, area);
+            // crate::components::helper::image::view(frame, "./assets/rezo.png".to_string(), img_area);
             if start_time.elapsed() > Duration::from_secs(1) {
                 frame.render_effect(&mut fade_effect, area, tachyonfx::Duration::from_millis(33));
             }

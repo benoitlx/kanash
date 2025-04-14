@@ -14,6 +14,8 @@ tui-rain = "1.0.1"
 tokio = { version = "1.44.2", features = ["full"] }
 futures = "0.3.31"
 tui-big-text = "0.7.1"
+ratatui-image = "5.0.0"
+image = "0.25.6"
 
 [dev-dependencies]
 crossterm = "0.29.0"
