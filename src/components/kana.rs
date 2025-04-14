@@ -1,7 +1,9 @@
 use crate::components::helper::ja::random_kana;
 use crate::components::helper::rain;
 use crate::components::helper::image;
+use rand::SeedableRng;
 use wana_kana::ConvertJapanese;
+use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
 
 use super::*;
 
@@ -17,6 +19,7 @@ pub struct KanaModel {
     input: String,
     current_kana: String,
     display_answer: bool,
+    rng: Mcg128Xsl64
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -34,12 +37,14 @@ pub enum KanaMessage {
 impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
+        let mut r = Pcg64Mcg::seed_from_u64(1234);
         Self {
             shown: 0,
             correct: 0,
             input: String::new(),
-            current_kana: random_kana(),
+            current_kana: random_kana(&mut r),
             display_answer: false,
+            rng: r, 
         }
     }
 
@@ -76,7 +81,7 @@ impl Components for KanaModel {
                         }
                         self.shown += 1;
                         self.input = String::new();
-                        self.current_kana = random_kana();
+                        self.current_kana = random_kana(&mut self.rng);
                     }
                 }
                 KanaMessage::Answer => {
@@ -92,7 +97,7 @@ impl Components for KanaModel {
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
-        // rain::view(frame, elapsed);
+        rain::view(frame, elapsed);
         // image::view(frame, "./assets/fuji.jpg".to_string(), frame.area());
         self.learning_zone(frame);
     }

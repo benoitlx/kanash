@@ -1,13 +1,12 @@
-use rand::Rng;
+use rand::{Rng, SeedableRng};
+use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
 
-fn random_hiragana() -> String {
-    let mut rng = rand::rng();
-
+fn random_hiragana(rng: &mut Mcg128Xsl64) -> String {
     String::from_utf16(&[rng.random_range(12353..12438)]).expect("error")
 }
 
-pub fn random_kana() -> String {
-    random_hiragana()
+pub fn random_kana(rng: &mut Mcg128Xsl64) -> String {
+    random_hiragana(rng)
 }
 
 pub fn get_hiragana() -> String {
