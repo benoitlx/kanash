@@ -10,9 +10,11 @@ pub use ratatui::{
     style::{palette::tailwind::SLATE, Modifier, Style},
     text::Line,
     widgets::{Block, Paragraph},
-    widgets::{BorderType, Borders, HighlightSpacing, List, ListItem, ListState, Padding},
+    widgets::{BorderType, Borders, HighlightSpacing, List, ListItem, ListState, Padding, Clear},
     Frame,
 };
+
+use std::time::Duration;
 
 use home::HomeMessage;
 use kana::KanaMessage;
@@ -33,5 +35,5 @@ pub trait Components {
 
     fn update(&mut self, msg: Message) -> Option<Message>;
 
-    fn view(&mut self, frame: &mut Frame);
+    fn view(&mut self, frame: &mut Frame, elapsed: Duration);
 }

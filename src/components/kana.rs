@@ -1,4 +1,5 @@
 use crate::components::helper::ja::{get_hiragana, random_kana};
+use crate::components::helper::rain;
 use wana_kana::ConvertJapanese;
 
 use super::*;
@@ -43,13 +44,17 @@ impl Components for KanaModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
-        if let Event::Key(key) = event::read().unwrap() {
-            match key.code {
-                KeyCode::Esc => Some(Message::Back),
-                KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
-                KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
-                KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
-                _ => None,
+        if event::poll(Duration::from_millis(10)).unwrap() {
+            if let Event::Key(key) = event::read().unwrap() {
+                match key.code {
+                    KeyCode::Esc => Some(Message::Back),
+                    KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
+                    KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
+                    KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
+                    _ => None,
+                }
+            } else {
+                None
             }
         } else {
             None
@@ -85,16 +90,13 @@ impl Components for KanaModel {
         None
     }
 
-    fn view(&mut self, frame: &mut Frame) {
+    fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
+        rain::view(frame, elapsed);
         self.learning_zone(frame);
     }
 }
 
 impl KanaModel {
-    fn background(&mut self, frame: &mut Frame) {
-        todo!()
-    }
-
     fn learning_zone(&mut self, frame: &mut Frame) {
         let [_, v_area, _] = Layout::vertical([
             Constraint::Min(0),
@@ -145,6 +147,7 @@ impl KanaModel {
 
         let p = Paragraph::new(text).block(block).centered();
 
+        frame.render_widget(Clear, main_area);
         frame.render_widget(p, main_area);
     }
 }

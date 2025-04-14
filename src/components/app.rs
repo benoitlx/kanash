@@ -53,10 +53,10 @@ impl Components for App {
         }
     }
 
-    fn view(&mut self, frame: &mut Frame) {
+    fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
         match self {
-            App::Home(h) => h.view(frame),
-            App::Kana(k) => k.view(frame),
+            App::Home(h) => h.view(frame, elapsed),
+            App::Kana(k) => k.view(frame, elapsed),
             _ => {}
         }
     }

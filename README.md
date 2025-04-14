@@ -15,8 +15,10 @@ See https://kana.rezoleo.fr for a demo.
 - [x] Refactor the `app.rs` using the Elm architecture
     - [x] move japanese helper function to another file
     - [x] isolate the kana ui into one component
-- [ ] look at rust multithreading and tokio
-    - Once I do this I could make a tui-rain component and render it's view asynchronously from the others components
+- [ ] ~~look at rust multithreading and tokio~~ (Only using `event::poll(Duration::from_millis(10)).unwrap()` in `handle_event` in order not to block the rendering)
+- [x] Better UI for Kana
+    - [x] tui-rain
+- [ ] splash screen
 - [ ] add a list of unused hiragana you don't want to show
 - [ ] look at how to do test with ratatui
 - [ ] ~~look at https://github.com/arthepsy/ssh-audit~~ (see the first note)

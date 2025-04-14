@@ -4,14 +4,18 @@ use components::Components;
 
 use ratatui::restore;
 
+use std::time::Instant;
+
 #[tokio::main]
 async fn main() {
     let mut terminal = ratatui::init();
 
     let mut app = App::new();
 
+    let start_time = Instant::now();
+
     while app != App::Exit {
-        let _ = terminal.draw(|frame| app.view(frame));
+        let _ = terminal.draw(|frame| app.view(frame, start_time.elapsed()));
 
         let mut current_msg = app.handle_event();
 

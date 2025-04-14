@@ -36,13 +36,17 @@ impl Components for HomeModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
-        if let Event::Key(key) = event::read().unwrap() {
-            match key.code {
-                KeyCode::Esc => Some(Message::Back),
-                KeyCode::Enter => Some(Message::Home(HomeMessage::Enter)),
-                KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
-                KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
-                _ => None,
+        if event::poll(Duration::from_millis(10)).unwrap() {
+            if let Event::Key(key) = event::read().unwrap() {
+                match key.code {
+                    KeyCode::Esc => Some(Message::Back),
+                    KeyCode::Enter => Some(Message::Home(HomeMessage::Enter)),
+                    KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
+                    KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
+                    _ => None,
+                }
+            } else {
+                None
             }
         } else {
             None
@@ -64,7 +68,7 @@ impl Components for HomeModel {
         None
     }
 
-    fn view(&mut self, frame: &mut Frame) {
+    fn view(&mut self, frame: &mut Frame, _elapsed: Duration) {
         let n_page: u16 = self.page_list.len().try_into().unwrap();
         let [_, main_area, _] = Layout::vertical([
             Constraint::Min(0),
