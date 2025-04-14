@@ -11,6 +11,7 @@ See https://kana.rezoleo.fr for a demo.
 # TODO
 
 - [ ] Rust build and test CI
+- [ ] enum for color palette
 - [ ] Add a parameter to the creation of a Kana Page (to know wheter to show hira kata or both, based on the selection in the Home Page)
 - [x] Refactor the `app.rs` using the Elm architecture
     - [x] move japanese helper function to another file

@@ -7,7 +7,7 @@ pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     layout::{Constraint, Layout},
     style::Stylize,
-    style::{palette::tailwind::SLATE, Modifier, Style},
+    style::{palette::tailwind::SLATE, Modifier, Style, Color},
     text::Line,
     widgets::{Block, Paragraph},
     widgets::{BorderType, Borders, HighlightSpacing, List, ListItem, ListState, Padding, Clear},
