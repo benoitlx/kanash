@@ -8,10 +8,6 @@ See https://kana.rezoleo.fr for a demo.
 > [!NOTE]
 > I'm pausing the ssh server part because I found a way to expose my TUI through http with [`gotty`](https://github.com/yudai/gotty)
 
-## Installation
-
-Download the binary from the latest  (x86_64 only for now) then make it executable with `chmod +x kanash`.
-
 ## Usage
 
 ### From the binary in the [release](https://github.com/benoitlx/kanash/releases/)
@@ -26,8 +22,14 @@ chmod +x kanash
 
 ### From docker image
 
+To expose it as a website :
 ```
 docker run --rm -p "80:7681" blximages/kanash
+```
+
+To run it directly in your terminal
+```
+docker run --rm -it --entrypoint=/bin/kanash blximages/kanash
 ```
 
 ## TODO
