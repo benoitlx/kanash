@@ -19,14 +19,14 @@ jobs:
         toolchain:
           - stable
     steps:
-      - uses: action/checkout@v4
+      - uses: actions/checkout@v4
       - run: rustup update ${{ matrix.toolchain }} && rustup default ${{ matrix.toolchain }}
       - run: cargo build --verbose --release
       - name: Upload release artifact
         uses: actions/upload-artifact@v4
         with:
           name: kanash
-          path: target/release/simple-assembler
+          path: target/release/kanash
 
   release:
     needs: build
@@ -39,11 +39,11 @@ jobs:
       - name: Download release artifact
         uses: actions/download-artifact@v4
         with:
-          name: simple-assembler 
+          name: kanash 
           path: .
 
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            ./simple-assembler
+            ./kanash
