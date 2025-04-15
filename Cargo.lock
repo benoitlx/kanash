@@ -851,6 +851,7 @@ dependencies = [
  "image",
  "rand 0.9.0",
  "rand_core 0.6.4",
+ "rand_pcg 0.9.0",
  "ratatui",
  "ratatui-image",
  "tachyonfx",
@@ -1275,6 +1276,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "59cad018caf63deb318e5a4586d99a24424a364f40f1e5778c29aca23f4fc73e"
 dependencies = [
  "rand_core 0.6.4",
+]
+
+[[package]]
+name = "rand_pcg"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b48ac3f7ffaab7fac4d2376632268aa5f89abdb55f7ebf8f4d11fffccb2320f7"
+dependencies = [
+ "rand_core 0.9.3",
 ]
 
 [[package]]
@@ -1772,7 +1782,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d279b27af071f5e31fef4ecd68f7c8b0b14ed9b97e8900c4ec66bf7ffbb216de"
 dependencies = [
  "rand 0.8.5",
- "rand_pcg",
+ "rand_pcg 0.3.1",
  "ratatui",
 ]
 
