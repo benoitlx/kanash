@@ -8,10 +8,29 @@ See https://kana.rezoleo.fr for a demo.
 > [!NOTE]
 > I'm pausing the ssh server part because I found a way to expose my TUI through http with [`gotty`](https://github.com/yudai/gotty)
 
-# TODO
+## Installation
 
-- [ ] Rust build and test CI
-- [ ] Use ttyd instead of gotty
+Download the binary from the latest  (x86_64 only for now) then make it executable with `chmod +x kanash`.
+
+## Usage
+
+### From the binary in the [release](https://github.com/benoitlx/kanash/releases/)
+
+```
+chmod +x kanash
+./kanash
+```
+
+> [!NOTE]
+> Only work on `x86_64` for now
+
+### From docker image (Soon TM)
+
+
+## TODO
+
+- [x] Rust build and test CI
+- [x] Use ttyd instead of gotty
 - [ ] enum for color palette
 - [ ] Add a parameter to the creation of a Kana Page (to know wheter to show hira kata or both, based on the selection in the Home Page)
 - [x] Refactor the `app.rs` using the Elm architecture
