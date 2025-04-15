@@ -19,3 +19,9 @@ target/
 # Added by cargo
 
 /target
+
+# Manually added
+.ssh/
+assets/*
+!assets/demo.gif
+demo.tape
