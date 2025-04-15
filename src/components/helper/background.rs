@@ -1,6 +1,5 @@
 /// From https://github.com/Levilutz/tui-rain/blob/main/src/lib.rs
 /// Thanks to Levi Lutz
-
 use std::{cmp::Ordering, time::Duration};
 
 use rand::{RngCore, SeedableRng};

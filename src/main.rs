@@ -3,6 +3,7 @@ use components::app::App;
 use components::Components;
 
 use ratatui::layout::{Constraint, Layout};
+use ratatui::text::Line;
 use ratatui::{restore, style::Style};
 
 use std::time::{Duration, Instant};
@@ -40,12 +41,16 @@ fn main() {
             .style(Style::fg(Style::new(), Color::from_u32(0x00ff33ff)))
             .build();
 
+        let credit = Line::from("@benoitlx")
+            .centered()
+            .style(Style::fg(Style::new(), Color::from_u32(0x00ff3399)));
+
         let _ = terminal.draw(|frame| {
             let [_, area, _, bottom] = Layout::vertical([
                 Constraint::Min(0),
                 Constraint::Length(4),
                 Constraint::Min(0),
-                Constraint::Percentage(10),
+                Constraint::Length(1),
             ])
             .areas(frame.area());
 
@@ -58,6 +63,7 @@ fn main() {
 
             frame.render_widget(p, area);
             // crate::components::helper::image::view(frame, "./assets/rezo.png".to_string(), img_area);
+            frame.render_widget(credit, img_area);
             if start_time.elapsed() > Duration::from_secs(1) {
                 frame.render_effect(&mut fade_effect, area, tachyonfx::Duration::from_millis(33));
             }

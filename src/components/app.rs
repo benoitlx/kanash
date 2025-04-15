@@ -19,7 +19,7 @@ impl Components for App {
             App::Kana(k) => k.handle_event(),
             _ => None,
         }
-    } 
+    }
 
     fn update(&mut self, msg: Message) -> Option<Message> {
         match self {
@@ -30,7 +30,7 @@ impl Components for App {
                 if msg == Message::Back {
                     *self = App::Exit;
                 }
-                
+
                 // transform self en App::Kana(new_kana(selected)) if msg == Message::Home(Enter)
                 if let Message::Home(HomeMessage::Enter) = msg {
                     let new_kana = KanaModel::new();
@@ -49,7 +49,7 @@ impl Components for App {
 
                 response
             }
-            _ => None
+            _ => None,
         }
     }
 

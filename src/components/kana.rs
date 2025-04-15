@@ -1,9 +1,11 @@
+use std::time::UNIX_EPOCH;
+
+use crate::components::helper::image;
 use crate::components::helper::ja::random_kana;
 use crate::components::helper::rain;
-use crate::components::helper::image;
 use rand::SeedableRng;
-use wana_kana::ConvertJapanese;
 use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
+use wana_kana::ConvertJapanese;
 
 use super::*;
 
@@ -19,7 +21,7 @@ pub struct KanaModel {
     input: String,
     current_kana: String,
     display_answer: bool,
-    rng: Mcg128Xsl64
+    rng: Mcg128Xsl64,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -37,14 +39,19 @@ pub enum KanaMessage {
 impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
-        let mut r = Pcg64Mcg::seed_from_u64(1234);
+        let mut r = Pcg64Mcg::seed_from_u64(
+            std::time::SystemTime::now()
+                .duration_since(UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
+        );
         Self {
             shown: 0,
             correct: 0,
             input: String::new(),
             current_kana: random_kana(&mut r),
             display_answer: false,
-            rng: r, 
+            rng: r,
         }
     }
 
@@ -137,7 +144,12 @@ impl KanaModel {
             .title(Line::from(TITLE).fg(Color::from_u32(0x00ff33ff)).centered())
             .title(left_title)
             .title(right_title)
-            .title_bottom(Line::from(KEY_HELPER).fg(Color::from_u32(0x00ff9933)).bold().centered())
+            .title_bottom(
+                Line::from(KEY_HELPER)
+                    .fg(Color::from_u32(0x00ff9933))
+                    .bold()
+                    .centered(),
+            )
             .border_type(BorderType::Rounded)
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);

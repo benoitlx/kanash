@@ -79,7 +79,12 @@ impl Components for HomeModel {
 
         let block = Block::new()
             .title(Line::from(TITLE).fg(Color::from_u32(0x00ff33ff)).centered())
-            .title_bottom(Line::from(KEY_HELPER).fg(Color::from_u32(0x00ff9933)).bold().centered())
+            .title_bottom(
+                Line::from(KEY_HELPER)
+                    .fg(Color::from_u32(0x00ff9933))
+                    .bold()
+                    .centered(),
+            )
             .border_type(BorderType::Rounded)
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);
