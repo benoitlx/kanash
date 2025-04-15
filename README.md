@@ -24,8 +24,11 @@ chmod +x kanash
 > [!NOTE]
 > Only work on `x86_64` for now
 
-### From docker image (Soon TM)
+### From docker image
 
+```
+docker run -p "80:7681" bleroux/kanash
+```
 
 ## TODO
 
