@@ -27,7 +27,7 @@ chmod +x kanash
 ### From docker image
 
 ```
-docker run -p "80:7681" bleroux/kanash
+docker run --rm -p "80:7681" blximages/kanash
 ```
 
 ## TODO
