@@ -1,9 +1,8 @@
 name: Build and Release
 
 on:
-  push:
-  pull_request:
-
+  release:
+    types: [published, released]
 
 permissions:
   contents: write
