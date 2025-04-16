@@ -3,7 +3,7 @@ name: Publish to crates.io
 
 on:
   release:
-    types: [published, released]
+    types: [published]
 
 jobs:
   push_to_crates_dot_io:
