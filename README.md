@@ -20,6 +20,12 @@ chmod +x kanash
 > [!NOTE]
 > Only work on `x86_64` for now
 
+### With `cargo`
+
+```
+cargo install kanash
+```
+
 ### From docker image
 
 To expose it as a website :

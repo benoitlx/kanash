@@ -1,6 +1,6 @@
 use std::time::UNIX_EPOCH;
 
-use crate::components::helper::image;
+// use crate::components::helper::image;
 use crate::components::helper::ja::random_kana;
 use crate::components::helper::rain;
 use rand::SeedableRng;

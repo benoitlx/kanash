@@ -1,5 +1,5 @@
-use rand::{seq::IndexedRandom, Rng, SeedableRng};
-use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
+use rand::seq::IndexedRandom;
+use rand_pcg::Mcg128Xsl64;
 
 const KANA_NUMBER: usize = 71;
 const WANTED_KANA: [u16; KANA_NUMBER] = [
@@ -19,6 +19,7 @@ pub fn random_kana(rng: &mut Mcg128Xsl64) -> String {
     random_hiragana(rng)
 }
 
+#[allow(dead_code)]
 pub fn get_hiragana() -> String {
     String::from_utf16(&WANTED_KANA).unwrap()
 }
