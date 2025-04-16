@@ -5,18 +5,13 @@ COPY ./Cargo.lock ./Cargo.toml ./
 COPY ./src ./src
 RUN rustup target add x86_64-unknown-linux-musl
 RUN cargo build --target x86_64-unknown-linux-musl
-
-# Download ttyd binary
-RUN wget https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.aarch64
     
 FROM alpine:latest
 
-COPY --from=builder /ttyd.aarch64 /bin/ttyd
-COPY --from=builder /target/x86_64-unknown-linux-musl/debug/kanash /bin
-RUN chmod +x /bin/ttyd
-# RUN chmod +x /bin/kanash
+COPY --from=builder /target/x86_64-unknown-linux-musl/debug/kanash /usr/bin
+RUN apk update && apk add ttyd
 
-CMD ["/bin/ttyd", "-W", "/bin/kanash"]
+CMD ["/usr/bin/ttyd", "-W", "/usr/bin/kanash"]
 
 # LABEL \
 #     org.opencontainers.image.title="kanash" \
