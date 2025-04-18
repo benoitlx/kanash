@@ -10,6 +10,8 @@ FROM alpine:latest
 
 COPY --from=builder /target/x86_64-unknown-linux-musl/debug/kanash /usr/bin
 RUN apk update && apk add ttyd
+RUN mkdir /assets
+COPY ./assets/gate_low_res.jpg /assets/
 
 CMD ["/usr/bin/ttyd", "-W", "/usr/bin/kanash"]
 
