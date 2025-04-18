@@ -24,4 +24,5 @@ target/
 .ssh/
 assets/*
 !assets/demo.gif
+!assets/gate_low_res.jpg
 demo.tape

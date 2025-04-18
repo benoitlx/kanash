@@ -8,6 +8,8 @@ use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
 use wana_kana::ConvertJapanese;
 
 use super::*;
+use ansi_to_tui::IntoText;
+use rascii_art::{render_to, RenderOptions};
 
 const TITLE: &str = " Hiragana ";
 const LEFT_TITLE: &str = " Shown: ";
@@ -57,7 +59,7 @@ impl Components for KanaModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
-        if event::poll(Duration::from_millis(10)).unwrap() {
+        if event::poll(Duration::from_millis(100)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
                     KeyCode::Esc => Some(Message::Back),
@@ -104,13 +106,31 @@ impl Components for KanaModel {
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
-        rain::view(frame, elapsed);
         // image::view(frame, "./assets/fuji.jpg".to_string(), frame.area());
+        self.background(frame);
+        rain::view(frame, elapsed);
         self.learning_zone(frame);
     }
 }
 
 impl KanaModel {
+    fn background(&mut self, frame: &mut Frame) {
+        let mut buffer = String::new();
+
+        render_to(
+            r"./assets/gate_low_res.jpg",
+            &mut buffer,
+            &RenderOptions::new()
+                .height(frame.area().height.into())
+                .colored(true),
+        )
+        .unwrap();
+
+        let widget = buffer.into_text().unwrap().centered();
+
+        frame.render_widget(widget, frame.area());
+    }
+
     fn learning_zone(&mut self, frame: &mut Frame) {
         let [_, v_area, _] = Layout::vertical([
             Constraint::Min(0),

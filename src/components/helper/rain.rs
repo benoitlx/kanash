@@ -8,7 +8,7 @@ const TAIL_COLOR: Color = Color::from_u32(0x0008dbbe);
 pub fn view(frame: &mut Frame, elapsed: Duration) {
     let rain = Rain::new_rain(elapsed)
         .with_rain_density(RainDensity::Relative { sparseness: 50 })
-        .with_rain_speed(RainSpeed::Absolute { speed: 10.0 })
+        .with_rain_speed(RainSpeed::Absolute { speed: 14.0 })
         .with_rain_speed_variance(0.6)
         .with_color(TAIL_COLOR)
         .with_noise_interval(Duration::from_secs(10));
