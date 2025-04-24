@@ -1,4 +1,4 @@
-use rand::seq::IndexedRandom;
+use rand::{seq::IndexedRandom, Rng};
 use rand_pcg::Mcg128Xsl64;
 
 const HIRAGANA_NUMBER: usize = 71;
@@ -21,14 +21,18 @@ const WANTED_KATAKANA: [u16; KATAKANA_NUMBER] = [
     12530, 12531, 12532,
 ];
 
-fn random_hiragana(rng: &mut Mcg128Xsl64) -> String {
+pub fn random_hiragana(rng: &mut Mcg128Xsl64) -> String {
     String::from_utf16(&[*WANTED_KANA.choose(rng).unwrap()]).expect("error hiragana")
 }
 
-fn random_katakana(rng: &mut Mcg128Xsl64) -> String {
+pub fn random_katakana(rng: &mut Mcg128Xsl64) -> String {
     String::from_utf16(&[*WANTED_KATAKANA.choose(rng).unwrap()]).expect("error katakana")
 }
 
 pub fn random_kana(rng: &mut Mcg128Xsl64) -> String {
-    random_hiragana(rng)
+    if rng.random_bool(0.5) {
+        random_hiragana(rng)
+    } else {
+        random_katakana(rng)
+    }
 }

@@ -7,7 +7,10 @@ use rand::SeedableRng;
 use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
 use wana_kana::ConvertJapanese;
 
-use super::*;
+use super::{
+    helper::ja::{random_hiragana, random_katakana},
+    *,
+};
 use ansi_to_tui::IntoText;
 use rascii_art::{render_to, RenderOptions};
 
@@ -17,6 +20,13 @@ const RIGHT_TITLE: &str = " Correct: ";
 const KEY_HELPER: &str = " Main Menu <Esc> | Show answer <Space> ";
 
 #[derive(Debug, PartialEq, Eq)]
+pub enum Mode {
+    Hira,
+    Kata,
+    Both,
+}
+
+#[derive(Debug, PartialEq, Eq)]
 pub struct KanaModel {
     shown: u32,
     correct: u32,
@@ -24,6 +34,7 @@ pub struct KanaModel {
     current_kana: String,
     display_answer: bool,
     rng: Mcg128Xsl64,
+    pub mode: Mode,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -36,6 +47,9 @@ pub enum KanaMessage {
 
     /// Delete roma
     DeleteRoma,
+
+    /// Pass,
+    Pass,
 }
 
 impl Components for KanaModel {
@@ -54,6 +68,7 @@ impl Components for KanaModel {
             current_kana: random_kana(&mut r),
             display_answer: false,
             rng: r,
+            mode: Mode::Hira,
         }
     }
 
@@ -78,7 +93,7 @@ impl Components for KanaModel {
 
     fn update(&mut self, msg: Message) -> Option<Message> {
         if let Message::Kana(kana_msg) = msg {
-            match kana_msg {
+            return match kana_msg {
                 KanaMessage::TypingRoma(c) => {
                     self.input.push(c);
 
@@ -89,18 +104,30 @@ impl Components for KanaModel {
                             self.correct += 1;
                         }
                         self.shown += 1;
-                        self.input = String::new();
-                        self.current_kana = random_kana(&mut self.rng);
+                        return Some(Message::Kana(KanaMessage::Pass));
                     }
+                    None
+                }
+                KanaMessage::Pass => {
+                    self.input = String::new();
+                    match self.mode {
+                        Mode::Hira => self.current_kana = random_hiragana(&mut self.rng),
+                        Mode::Kata => self.current_kana = random_katakana(&mut self.rng),
+                        Mode::Both => self.current_kana = random_kana(&mut self.rng),
+                    }
+
+                    None
                 }
                 KanaMessage::Answer => {
                     self.display_answer = true;
                     self.input = String::new();
+                    None
                 }
                 KanaMessage::DeleteRoma => {
                     self.input.pop();
+                    None
                 }
-            }
+            };
         }
         None
     }

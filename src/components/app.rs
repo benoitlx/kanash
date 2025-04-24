@@ -24,7 +24,11 @@ impl Components for App {
     fn update(&mut self, msg: Message) -> Option<Message> {
         match self {
             App::Home(h) => {
-                let response = h.update(msg.clone());
+                if msg == Message::Home(HomeMessage::Up) || msg == Message::Home(HomeMessage::Down)
+                {
+                    let response = h.update(msg.clone());
+                    return response;
+                }
 
                 // quit if msg == Message::Back
                 if msg == Message::Back {
@@ -32,12 +36,22 @@ impl Components for App {
                 }
 
                 // transform self en App::Kana(new_kana(selected)) if msg == Message::Home(Enter)
-                if let Message::Home(HomeMessage::Enter) = msg {
-                    let new_kana = KanaModel::new();
+                if let Message::Home(home_msg) = msg {
+                    let mut new_kana = KanaModel::new();
+
+                    match home_msg {
+                        HomeMessage::EnterHira => new_kana.mode = Mode::Hira,
+                        HomeMessage::EnterKata => new_kana.mode = Mode::Kata,
+                        HomeMessage::EnterBoth => new_kana.mode = Mode::Both,
+                        _ => {}
+                    }
+
+                    new_kana.update(Message::Kana(KanaMessage::Pass));
+
                     *self = App::Kana(new_kana);
                 }
 
-                response
+                None
             }
             App::Kana(k) => {
                 let response = k.update(msg.clone());

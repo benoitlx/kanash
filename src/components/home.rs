@@ -13,7 +13,9 @@ pub struct HomeModel {
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum HomeMessage {
     /// Launch a Page
-    Enter,
+    EnterHira,
+    EnterKata,
+    EnterBoth,
 
     Up,
     Down,
@@ -40,7 +42,15 @@ impl Components for HomeModel {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
                     KeyCode::Esc => Some(Message::Back),
-                    KeyCode::Enter => Some(Message::Home(HomeMessage::Enter)),
+                    KeyCode::Enter if self.state.selected() == Some(0) => {
+                        Some(Message::Home(HomeMessage::EnterHira))
+                    }
+                    KeyCode::Enter if self.state.selected() == Some(1) => {
+                        Some(Message::Home(HomeMessage::EnterKata))
+                    }
+                    KeyCode::Enter if self.state.selected() == Some(2) => {
+                        Some(Message::Home(HomeMessage::EnterBoth))
+                    }
                     KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
                     KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
                     _ => None,
@@ -62,7 +72,7 @@ impl Components for HomeModel {
                 HomeMessage::Up => {
                     self.state.select_previous();
                 }
-                HomeMessage::Enter => {}
+                _ => {}
             }
         }
         None

@@ -18,6 +18,7 @@ use std::time::Duration;
 
 use home::HomeMessage;
 use kana::KanaMessage;
+use kana::Mode;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Message {
