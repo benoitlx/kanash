@@ -16,9 +16,8 @@ pub use ratatui::{
 
 use std::time::Duration;
 
-use home::HomeMessage;
+use home::{HomeMessage, Mode};
 use kana::KanaMessage;
-use kana::Mode;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Message {

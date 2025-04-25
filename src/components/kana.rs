@@ -2,7 +2,6 @@ use std::time::UNIX_EPOCH;
 
 // use crate::components::helper::image;
 use crate::components::helper::ja::random_kana;
-use crate::components::helper::rain;
 use rand::SeedableRng;
 use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
 use wana_kana::ConvertJapanese;
@@ -11,20 +10,11 @@ use super::{
     helper::ja::{random_hiragana, random_katakana},
     *,
 };
-use ansi_to_tui::IntoText;
-use rascii_art::{render_to, RenderOptions};
 
 const TITLE: &str = " Hiragana ";
 const LEFT_TITLE: &str = " Shown: ";
 const RIGHT_TITLE: &str = " Correct: ";
 const KEY_HELPER: &str = " Main Menu <Esc> | Show answer <Space> ";
-
-#[derive(Debug, PartialEq, Eq)]
-pub enum Mode {
-    Hira,
-    Kata,
-    Both,
-}
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct KanaModel {
@@ -74,7 +64,7 @@ impl Components for KanaModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
-        if event::poll(Duration::from_millis(100)).unwrap() {
+        if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
                     KeyCode::Esc => Some(Message::Back),
@@ -132,32 +122,12 @@ impl Components for KanaModel {
         None
     }
 
-    fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
-        // image::view(frame, "./assets/fuji.jpg".to_string(), frame.area());
-        self.background(frame);
-        rain::view(frame, elapsed);
+    fn view(&mut self, frame: &mut Frame, _elapsed: Duration) {
         self.learning_zone(frame);
     }
 }
 
 impl KanaModel {
-    fn background(&mut self, frame: &mut Frame) {
-        let mut buffer = String::new();
-
-        render_to(
-            r"./assets/gate_low_res.jpg",
-            &mut buffer,
-            &RenderOptions::new()
-                .height(frame.area().height.into())
-                .colored(true),
-        )
-        .unwrap();
-
-        let widget = buffer.into_text().unwrap().centered();
-
-        frame.render_widget(widget, frame.area());
-    }
-
     fn learning_zone(&mut self, frame: &mut Frame) {
         let [_, v_area, _] = Layout::vertical([
             Constraint::Min(0),

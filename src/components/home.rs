@@ -4,6 +4,13 @@ const KEY_HELPER: &str = " Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Ente
 const TITLE: &str = " KANA SH ";
 const SELECTED_STYLE: Style = Style::new().bg(SLATE.c800).add_modifier(Modifier::BOLD);
 
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum Mode {
+    Hira,
+    Kata,
+    Both,
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct HomeModel {
     page_list: Vec<String>,
@@ -13,9 +20,7 @@ pub struct HomeModel {
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum HomeMessage {
     /// Launch a Page
-    EnterHira,
-    EnterKata,
-    EnterBoth,
+    Enter(Mode),
 
     Up,
     Down,
@@ -38,18 +43,21 @@ impl Components for HomeModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
-        if event::poll(Duration::from_millis(10)).unwrap() {
+        if event::poll(Duration::from_millis(1)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
                     KeyCode::Esc => Some(Message::Back),
-                    KeyCode::Enter if self.state.selected() == Some(0) => {
-                        Some(Message::Home(HomeMessage::EnterHira))
-                    }
-                    KeyCode::Enter if self.state.selected() == Some(1) => {
-                        Some(Message::Home(HomeMessage::EnterKata))
-                    }
-                    KeyCode::Enter if self.state.selected() == Some(2) => {
-                        Some(Message::Home(HomeMessage::EnterBoth))
+                    KeyCode::Enter => {
+                        if let Some(i) = self.state.selected() {
+                            match i {
+                                0 => Some(Message::Home(HomeMessage::Enter(Mode::Hira))),
+                                1 => Some(Message::Home(HomeMessage::Enter(Mode::Kata))),
+                                2 => Some(Message::Home(HomeMessage::Enter(Mode::Both))),
+                                _ => None,
+                            }
+                        } else {
+                            None
+                        }
                     }
                     KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
                     KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
