@@ -110,6 +110,7 @@ impl Components for HomeModel {
             .highlight_style(SELECTED_STYLE)
             .highlight_spacing(HighlightSpacing::Always);
 
+        frame.render_widget(Clear, main_area);
         frame.render_stateful_widget(list, main_area, &mut self.state);
     }
 }
