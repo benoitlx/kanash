@@ -144,26 +144,26 @@ impl KanaModel {
         .areas(v_area);
 
         let left_title = Line::from(vec![
-            LEFT_TITLE.fg(Color::from_u32(0x00ff3399)).into(),
+            LEFT_TITLE.fg(ColorPalette::SUBTITLE).into(),
             self.shown.to_string().yellow(),
             " ".into(),
         ])
         .left_aligned();
 
         let right_title = Line::from(vec![
-            RIGHT_TITLE.fg(Color::from_u32(0x00ff3399)).into(),
+            RIGHT_TITLE.fg(ColorPalette::SUBTITLE).into(),
             self.correct.to_string().yellow(),
             " ".into(),
         ])
         .right_aligned();
 
         let block = Block::new()
-            .title(Line::from(TITLE).fg(Color::from_u32(0x00ff33ff)).centered())
+            .title(Line::from(TITLE).fg(ColorPalette::TITLE).centered())
             .title(left_title)
             .title(right_title)
             .title_bottom(
                 Line::from(KEY_HELPER)
-                    .fg(Color::from_u32(0x00ff9933))
+                    .fg(ColorPalette::KEY_HINT)
                     .bold()
                     .centered(),
             )
@@ -174,7 +174,7 @@ impl KanaModel {
         let text = vec![
             Line::from(self.current_kana.clone()),
             if self.display_answer {
-                Line::from(self.current_kana.to_romaji()).fg(Color::from_u32(0x00ff3333))
+                Line::from(self.current_kana.to_romaji()).fg(ColorPalette::ERROR)
             } else {
                 Line::default()
             },

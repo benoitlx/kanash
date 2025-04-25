@@ -2,7 +2,9 @@ use super::*;
 
 const KEY_HELPER: &str = " Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Enter> ";
 const TITLE: &str = " KANA SH ";
-const SELECTED_STYLE: Style = Style::new().bg(SLATE.c800).add_modifier(Modifier::BOLD);
+const SELECTED_STYLE: Style = Style::new()
+    .bg(ColorPalette::SELECTION)
+    .add_modifier(Modifier::BOLD);
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Mode {
@@ -96,10 +98,10 @@ impl Components for HomeModel {
         .areas(frame.area());
 
         let block = Block::new()
-            .title(Line::from(TITLE).fg(Color::from_u32(0x00ff33ff)).centered())
+            .title(Line::from(TITLE).fg(ColorPalette::TITLE).centered())
             .title_bottom(
                 Line::from(KEY_HELPER)
-                    .fg(Color::from_u32(0x00ff9933))
+                    .fg(ColorPalette::KEY_HINT)
                     .bold()
                     .centered(),
             )

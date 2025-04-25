@@ -1,6 +1,6 @@
 mod components;
 use components::app::App;
-use components::Components;
+use components::{ColorPalette, Components};
 
 use ratatui::layout::{Constraint, Layout};
 use ratatui::text::Line;
@@ -8,19 +8,8 @@ use ratatui::{restore, style::Style};
 
 use std::time::{Duration, Instant};
 
-use ratatui::style::Color;
 use tachyonfx::{fx, EffectRenderer, Interpolation};
 use tui_big_text::{BigText, PixelSize};
-
-/*
-Color Palette
-#ff33ff
-#ff3399
-#ff3333
-#ff9933
-#ffff33
-#99ff33
- */
 
 fn main() {
     let mut terminal = ratatui::init();
@@ -38,12 +27,12 @@ fn main() {
             .pixel_size(PixelSize::HalfHeight)
             .lines(vec![">> Kana SH <<".into()])
             .centered()
-            .style(Style::fg(Style::new(), Color::from_u32(0x00ff33ff)))
+            .style(Style::fg(Style::new(), ColorPalette::TITLE))
             .build();
 
         let credit = Line::from("@benoitlx")
             .centered()
-            .style(Style::fg(Style::new(), Color::from_u32(0x00ff3399)));
+            .style(Style::fg(Style::new(), ColorPalette::SUBTITLE));
 
         let _ = terminal.draw(|frame| {
             let [_, area, _, bottom] = Layout::vertical([

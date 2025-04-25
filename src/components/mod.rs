@@ -19,6 +19,18 @@ use std::time::Duration;
 use home::{HomeMessage, Mode};
 use kana::KanaMessage;
 
+pub struct ColorPalette;
+
+impl ColorPalette {
+    pub const TITLE: Color = Color::from_u32(0x00ff33ff);
+    pub const SUBTITLE: Color = Color::from_u32(0x00ff3399);
+    pub const ERROR: Color = Color::from_u32(0x00ff3333);
+    pub const KEY_HINT: Color = Color::from_u32(0x00ff9933);
+    pub const SELECTION: Color = SLATE.c800;
+    // 0x00ffff33
+    // #99ff33
+}
+
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum Message {
     /// Go to the previous page or quit the app
