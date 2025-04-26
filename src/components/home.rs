@@ -1,6 +1,7 @@
 use super::*;
 
-const KEY_HELPER: &str = " Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Enter> ";
+const KEY_HELPER: &str =
+    " Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Enter> | Rain fx <x> | Background <b> ";
 const TITLE: &str = " KANA SH ";
 const SELECTED_STYLE: Style = Style::new()
     .bg(ColorPalette::SELECTION)
@@ -26,6 +27,9 @@ pub enum HomeMessage {
 
     Up,
     Down,
+
+    RainFx,
+    Background,
 }
 
 impl Components for HomeModel {
@@ -45,7 +49,7 @@ impl Components for HomeModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
-        if event::poll(Duration::from_millis(1)).unwrap() {
+        if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
                     KeyCode::Esc => Some(Message::Back),
@@ -63,6 +67,8 @@ impl Components for HomeModel {
                     }
                     KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
                     KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
+                    KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
+                    KeyCode::Char('b') => Some(Message::Home(HomeMessage::Background)),
                     _ => None,
                 }
             } else {

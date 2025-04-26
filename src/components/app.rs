@@ -2,6 +2,7 @@ use super::{home::HomeModel, kana::KanaModel, *};
 use crate::components::helper::rain;
 use ansi_to_tui::IntoText;
 use rascii_art::{render_to, RenderOptions};
+use ratatui::text::Text;
 
 #[derive(Debug, PartialEq, Eq)]
 enum AppPage {
@@ -12,9 +13,11 @@ enum AppPage {
 #[derive(Debug, PartialEq, Eq)]
 pub struct App {
     pub exit: bool,
-    background_buffer: String,
+    background_widget: Box<Text<'static>>,
     page: AppPage,
     previous_height: u16,
+    disable_rain: bool,
+    disable_background: bool,
 }
 
 impl Components for App {
@@ -24,8 +27,10 @@ impl Components for App {
         Self {
             exit: false,
             page: AppPage::Home(home),
-            background_buffer: String::new(),
+            background_widget: Box::new(Text::default()),
             previous_height: 0,
+            disable_rain: false,
+            disable_background: false,
         }
     }
 
@@ -42,6 +47,16 @@ impl Components for App {
                 // quit if msg == Message::Back
                 if msg == Message::Back {
                     self.exit = true;
+                    return None;
+                }
+
+                if msg == Message::Home(HomeMessage::RainFx) {
+                    self.disable_rain = !self.disable_rain;
+                    return None;
+                }
+
+                if msg == Message::Home(HomeMessage::Background) {
+                    self.disable_background = !self.disable_background;
                     return None;
                 }
 
@@ -68,7 +83,9 @@ impl Components for App {
 
                 // transform self en App::Home(new_home) if msg == Message::Back
                 if msg == Message::Back {
-                    *self = App::new()
+                    let home = HomeModel::new();
+
+                    self.page = AppPage::Home(home);
                 }
 
                 response
@@ -77,7 +94,12 @@ impl Components for App {
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
-        self.background(frame, elapsed);
+        if !self.disable_background {
+            self.background(frame);
+        }
+        if !self.disable_rain {
+            rain::view(frame, elapsed);
+        }
         match &mut self.page {
             AppPage::Home(ref mut h) => h.view(frame, elapsed),
             AppPage::Kana(ref mut k) => k.view(frame, elapsed),
@@ -86,28 +108,27 @@ impl Components for App {
 }
 
 impl App {
-    fn background(&mut self, frame: &mut Frame, elapsed: Duration) {
+    fn background(&mut self, frame: &mut Frame) {
         let actual_height = frame.area().height;
         if self.previous_height != actual_height {
             self.write_background(actual_height.into());
             self.previous_height = actual_height;
         }
 
-        let widget = self.background_buffer.into_text().unwrap().centered();
-
-        frame.render_widget(widget, frame.area());
-        rain::view(frame, elapsed);
+        frame.render_widget((*self.background_widget).clone(), frame.area());
     }
 
     fn write_background(&mut self, height: u32) {
         // needed because otherwise the render_to function take a while to overwrite the previous string
-        self.background_buffer = String::new();
+        let mut buffer = String::new();
 
         render_to(
             r"./assets/gate_low_res.jpg",
-            &mut self.background_buffer,
+            &mut buffer,
             &RenderOptions::new().height(height).colored(true),
         )
         .unwrap();
+
+        self.background_widget = Box::new(buffer.into_text().unwrap().centered());
     }
 }
