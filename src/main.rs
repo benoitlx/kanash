@@ -60,7 +60,7 @@ fn main() {
     }
 
     // Main app rendering
-    while app != App::Exit {
+    while !app.exit {
         let _ = terminal.draw(|frame| app.view(frame, start_time.elapsed()));
 
         let mut current_msg = app.handle_event();

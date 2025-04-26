@@ -4,32 +4,44 @@ use ansi_to_tui::IntoText;
 use rascii_art::{render_to, RenderOptions};
 
 #[derive(Debug, PartialEq, Eq)]
-pub enum App {
+enum AppPage {
     Home(HomeModel),
     Kana(KanaModel),
-    Exit,
+}
+
+#[derive(Debug, PartialEq, Eq)]
+pub struct App {
+    pub exit: bool,
+    background_buffer: String,
+    page: AppPage,
+    previous_height: u16,
 }
 
 impl Components for App {
     fn new() -> Self {
         let home = HomeModel::new();
-        App::Home(home)
+
+        Self {
+            exit: false,
+            page: AppPage::Home(home),
+            background_buffer: String::new(),
+            previous_height: 0,
+        }
     }
 
     fn handle_event(&self) -> Option<Message> {
-        match self {
-            App::Home(h) => h.handle_event(),
-            App::Kana(k) => k.handle_event(),
-            _ => None,
+        match &self.page {
+            AppPage::Home(h) => h.handle_event(),
+            AppPage::Kana(k) => k.handle_event(),
         }
     }
 
     fn update(&mut self, msg: Message) -> Option<Message> {
-        match self {
-            App::Home(h) => {
+        match &mut self.page {
+            AppPage::Home(ref mut h) => {
                 // quit if msg == Message::Back
                 if msg == Message::Back {
-                    *self = App::Exit;
+                    self.exit = true;
                     return None;
                 }
 
@@ -46,12 +58,12 @@ impl Components for App {
                     new_kana.mode = mode;
                     new_kana.update(Message::Kana(KanaMessage::Pass));
 
-                    *self = App::Kana(new_kana);
+                    self.page = AppPage::Kana(new_kana);
                 }
 
                 None
             }
-            App::Kana(k) => {
+            AppPage::Kana(ref mut k) => {
                 let response = k.update(msg.clone());
 
                 // transform self en App::Home(new_home) if msg == Message::Back
@@ -61,36 +73,41 @@ impl Components for App {
 
                 response
             }
-            _ => None,
         }
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
         self.background(frame, elapsed);
-        match self {
-            App::Home(h) => h.view(frame, elapsed),
-            App::Kana(k) => k.view(frame, elapsed),
-            _ => {}
+        match &mut self.page {
+            AppPage::Home(ref mut h) => h.view(frame, elapsed),
+            AppPage::Kana(ref mut k) => k.view(frame, elapsed),
         }
     }
 }
 
 impl App {
     fn background(&mut self, frame: &mut Frame, elapsed: Duration) {
-        let mut buffer = String::new();
+        let actual_height = frame.area().height;
+        if self.previous_height != actual_height {
+            self.write_background(actual_height.into());
+            self.previous_height = actual_height;
+        }
 
-        render_to(
-            r"./assets/gate_low_res.jpg",
-            &mut buffer,
-            &RenderOptions::new()
-                .height(frame.area().height.into())
-                .colored(true),
-        )
-        .unwrap();
-
-        let widget = buffer.into_text().unwrap().centered();
+        let widget = self.background_buffer.into_text().unwrap().centered();
 
         frame.render_widget(widget, frame.area());
         rain::view(frame, elapsed);
+    }
+
+    fn write_background(&mut self, height: u32) {
+        // needed because otherwise the render_to function take a while to overwrite the previous string
+        self.background_buffer = String::new();
+
+        render_to(
+            r"./assets/gate_low_res.jpg",
+            &mut self.background_buffer,
+            &RenderOptions::new().height(height).colored(true),
+        )
+        .unwrap();
     }
 }
