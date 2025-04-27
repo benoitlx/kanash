@@ -17,7 +17,8 @@ pub struct App {
     page: AppPage,
     previous_height: u16,
     disable_rain: bool,
-    disable_background: bool,
+    pub disable_background: bool,
+    pub background_paths: Vec<String>,
 }
 
 impl Components for App {
@@ -31,6 +32,7 @@ impl Components for App {
             previous_height: 0,
             disable_rain: false,
             disable_background: false,
+            background_paths: vec![],
         }
     }
 
@@ -122,12 +124,16 @@ impl App {
         // needed because otherwise the render_to function take a while to overwrite the previous string
         let mut buffer = String::new();
 
-        render_to(
-            r"./assets/gate_low_res.jpg",
-            &mut buffer,
-            &RenderOptions::new().height(height).colored(true),
-        )
-        .unwrap();
+        if !self.background_paths.is_empty() {
+            render_to(
+                self.background_paths[0].clone(),
+                &mut buffer,
+                &RenderOptions::new().height(height).colored(true),
+            )
+            .unwrap();
+        } else {
+            buffer = String::from("No assets directory")
+        }
 
         self.background_widget = Box::new(buffer.into_text().unwrap().centered());
     }

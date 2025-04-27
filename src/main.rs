@@ -1,4 +1,5 @@
 mod components;
+use anyhow::Result;
 use components::app::App;
 use components::{ColorPalette, Components};
 
@@ -11,10 +12,30 @@ use std::time::{Duration, Instant};
 use tachyonfx::{fx, EffectRenderer, Interpolation};
 use tui_big_text::{BigText, PixelSize};
 
+use clap::Parser;
+
+#[derive(Parser, Debug)]
+struct Args {
+    /// Path to the assets directory
+    #[arg(short, long)]
+    path: Option<String>,
+}
+
 fn main() {
+    let arg = Args::parse();
+
     let mut terminal = ratatui::init();
 
     let mut app = App::new();
+    if let Some(path) = arg.path {
+        let assets = std::fs::read_dir(path)
+            .unwrap()
+            .map(|entry| entry.unwrap().path().to_str().unwrap().to_string())
+            .collect::<Vec<_>>();
+        app.background_paths = assets;
+    } else {
+        app.disable_background = true;
+    }
 
     let start_time = Instant::now();
 

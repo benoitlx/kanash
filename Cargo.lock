@@ -799,6 +799,7 @@ version = "0.1.2"
 dependencies = [
  "ansi-to-tui",
  "anyhow",
+ "clap",
  "crossterm 0.29.0",
  "futures",
  "rand 0.9.1",
