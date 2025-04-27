@@ -18,6 +18,7 @@ pub struct App {
     previous_height: u16,
     disable_rain: bool,
     pub disable_background: bool,
+    background_number: usize,
     pub background_paths: Vec<String>,
 }
 
@@ -33,6 +34,7 @@ impl Components for App {
             disable_rain: false,
             disable_background: false,
             background_paths: vec![],
+            background_number: 0,
         }
     }
 
@@ -58,7 +60,28 @@ impl Components for App {
                 }
 
                 if msg == Message::Home(HomeMessage::Background) {
-                    self.disable_background = !self.disable_background;
+                    match h.background_state {
+                        BackgroundMode::Cycle => {
+                            self.background_number += 1;
+                            self.previous_height = 0;
+
+                            if self.background_number + 1 == self.background_paths.len() {
+                                h.key_helper_state = BackgroundMode::Disable
+                            }
+
+                            if self.background_number >= self.background_paths.len() {
+                                self.disable_background = true;
+                                self.background_number = 0;
+                                h.background_state = BackgroundMode::Disable;
+                                h.key_helper_state = BackgroundMode::Cycle;
+                            }
+                        }
+                        BackgroundMode::Disable => {
+                            h.background_state = BackgroundMode::Cycle;
+                            self.disable_background = false;
+                        }
+                    }
+
                     return None;
                 }
 
@@ -126,13 +149,13 @@ impl App {
 
         if !self.background_paths.is_empty() {
             render_to(
-                self.background_paths[0].clone(),
+                self.background_paths[self.background_number].clone(),
                 &mut buffer,
                 &RenderOptions::new().height(height).colored(true),
             )
             .unwrap();
         } else {
-            buffer = String::from("No assets directory")
+            buffer = String::from("No asset directory")
         }
 
         self.background_widget = Box::new(buffer.into_text().unwrap().centered());

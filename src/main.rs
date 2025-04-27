@@ -1,5 +1,4 @@
 mod components;
-use anyhow::Result;
 use components::app::App;
 use components::{ColorPalette, Components};
 
@@ -33,8 +32,6 @@ fn main() {
             .map(|entry| entry.unwrap().path().to_str().unwrap().to_string())
             .collect::<Vec<_>>();
         app.background_paths = assets;
-    } else {
-        app.disable_background = true;
     }
 
     let start_time = Instant::now();

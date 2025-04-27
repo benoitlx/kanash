@@ -1,7 +1,9 @@
 use super::*;
 
-const KEY_HELPER: &str =
-    " Quit <Esc> | ⌃ <j,Down> | ⌄ <k,Up> | Select <Enter> | Rain fx <x> | Background <b> ";
+const KEY_HELPER_CYCLE: &str =
+    " Quit <Esc> | Move <j,Down,k,Up> | Select <Enter> | Rain <x> | Cycle Background <b> ";
+const KEY_HELPER_NONE: &str =
+    " Quit <Esc> | Move <j,Down,k,Up> | Select <Enter> | Rain <x> | No Background <b> ";
 const TITLE: &str = " KANA SH ";
 const SELECTED_STYLE: Style = Style::new()
     .bg(ColorPalette::SELECTION)
@@ -14,10 +16,18 @@ pub enum Mode {
     Both,
 }
 
+#[derive(Debug, PartialEq, Eq, Clone)]
+pub enum BackgroundMode {
+    Cycle,
+    Disable,
+}
+
 #[derive(Debug, PartialEq, Eq)]
 pub struct HomeModel {
     page_list: Vec<String>,
     state: ListState,
+    pub background_state: BackgroundMode,
+    pub key_helper_state: BackgroundMode,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone)]
@@ -44,6 +54,8 @@ impl Components for HomeModel {
                 "Learn Both".into(),
             ],
             state: init_state,
+            background_state: BackgroundMode::Cycle,
+            key_helper_state: BackgroundMode::Cycle,
         }
     }
 
@@ -103,10 +115,15 @@ impl Components for HomeModel {
         ])
         .areas(frame.area());
 
+        let key_helper = match self.key_helper_state {
+            BackgroundMode::Cycle => KEY_HELPER_CYCLE,
+            BackgroundMode::Disable => KEY_HELPER_NONE,
+        };
+
         let block = Block::new()
             .title(Line::from(TITLE).fg(ColorPalette::TITLE).centered())
             .title_bottom(
-                Line::from(KEY_HELPER)
+                Line::from(key_helper)
                     .fg(ColorPalette::KEY_HINT)
                     .bold()
                     .centered(),

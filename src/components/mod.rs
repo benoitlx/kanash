@@ -16,7 +16,7 @@ pub use ratatui::{
 
 use std::time::Duration;
 
-use home::{HomeMessage, Mode};
+use home::{BackgroundMode, HomeMessage, Mode};
 use kana::KanaMessage;
 
 pub struct ColorPalette;
