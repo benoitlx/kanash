@@ -70,7 +70,7 @@ docker run --rm -v ./assets:/home/assets -it --entrypoint=/usr/bin/kanash blxima
 
 ## Acknowledgments
 
-- [ratatui](https://github.com/ratatui/ratatui) :hearth:
+- [ratatui](https://github.com/ratatui/ratatui) :heart:
 - [ttyd](https://github.com/tsl0922/ttyd)
 - [wana-kana-rust](https://github.com/PSeitz/wana_kana_rust)
 
