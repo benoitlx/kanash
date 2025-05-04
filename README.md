@@ -66,11 +66,11 @@ docker run --rm -v ./assets:/home/assets -it --entrypoint=/usr/bin/kanash blxima
 
 ## Contribute
 
-_Advices_ and _PRs_ are very much apreciated
+**Advices** and **PRs** are very much apreciated
 
 ## Acknowledgments
 
-- [ratatui](https://github.com/ratatui/ratatui)
+- [ratatui](https://github.com/ratatui/ratatui) :hearth:
 - [ttyd](https://github.com/tsl0922/ttyd)
 - [wana-kana-rust](https://github.com/PSeitz/wana_kana_rust)
 

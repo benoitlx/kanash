@@ -795,7 +795,7 @@ dependencies = [
 
 [[package]]
 name = "kanash"
-version = "0.1.2"
+version = "0.1.4"
 dependencies = [
  "ansi-to-tui",
  "anyhow",
