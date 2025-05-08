@@ -28,6 +28,12 @@ chmod +x kanash
 cargo install kanash
 ```
 
+### On Arch Linux (AUR)
+
+```
+paru -S kanash
+```
+
 ### From docker image
 
 To expose it as a website :
