@@ -1,6 +1,5 @@
-mod components;
-use components::app::App;
-use components::{ColorPalette, Components};
+use kanash_components::app::App;
+use kanash_components::{ColorPalette, Components};
 
 use ratatui::layout::{Constraint, Layout};
 use ratatui::text::Line;

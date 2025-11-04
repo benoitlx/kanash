@@ -1,5 +1,5 @@
 use super::{home::HomeModel, kana::KanaModel, *};
-use crate::components::helper::rain;
+use crate::helper::rain;
 use ansi_to_tui::IntoText;
 use rascii_art::{render_to, RenderOptions};
 use ratatui::text::Text;

@@ -1,7 +1,7 @@
 use std::time::UNIX_EPOCH;
 
 // use crate::components::helper::image;
-use crate::components::helper::ja::random_kana;
+use crate::helper::ja::random_kana;
 use rand::SeedableRng;
 use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
 use wana_kana::ConvertJapanese;
