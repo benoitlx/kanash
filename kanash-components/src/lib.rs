@@ -3,6 +3,7 @@ pub mod helper;
 pub mod home;
 pub mod kana;
 
+#[cfg(not(target_arch = "wasm32"))]
 pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     layout::{Constraint, Layout},
@@ -13,6 +14,19 @@ pub use ratatui::{
     widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
     Frame,
 };
+
+#[cfg(target_arch = "wasm32")]
+pub use ratzilla::ratatui::{
+    layout::{Constraint, Layout},
+    style::Stylize,
+    style::{palette::tailwind::SLATE, Color, Modifier, Style},
+    text::Line,
+    widgets::{Block, Paragraph},
+    widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
+    Frame,
+};
+#[cfg(target_arch = "wasm32")]
+use ratzilla::event::KeyCode;
 
 use std::time::Duration;
 

@@ -1,8 +1,16 @@
 use super::{home::HomeModel, kana::KanaModel, *};
+
+#[cfg(not(target_arch = "wasm32"))]
 use crate::helper::rain;
+#[cfg(not(target_arch = "wasm32"))]
 use ansi_to_tui::IntoText;
+#[cfg(not(target_arch = "wasm32"))]
 use rascii_art::{render_to, RenderOptions};
+
+#[cfg(not(target_arch = "wasm32"))]
 use ratatui::text::Text;
+#[cfg(target_arch = "wasm32")]
+use ratzilla::ratatui::text::Text;
 
 #[derive(Debug, PartialEq, Eq)]
 enum AppPage {
@@ -119,12 +127,17 @@ impl Components for App {
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
+
+        #[cfg(not(target_arch = "wasm32"))]
         if !self.disable_background {
             self.background(frame);
         }
+
+        #[cfg(not(target_arch = "wasm32"))]
         if !self.disable_rain {
             rain::view(frame, elapsed);
         }
+
         match &mut self.page {
             AppPage::Home(ref mut h) => h.view(frame, elapsed),
             AppPage::Kana(ref mut k) => k.view(frame, elapsed),
@@ -132,6 +145,7 @@ impl Components for App {
     }
 }
 
+#[cfg(not(target_arch = "wasm32"))]
 impl App {
     fn background(&mut self, frame: &mut Frame) {
         let actual_height = frame.area().height;

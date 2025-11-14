@@ -64,21 +64,24 @@ impl Components for KanaModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
+        #[cfg(not(target_arch = "wasm32"))]
         if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
-                match key.code {
+                return match key.code {
                     KeyCode::Esc => Some(Message::Back),
                     KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
                     KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
                     KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
                     _ => None,
-                }
+                };
             } else {
-                None
+                return None;
             }
         } else {
-            None
+            return None;
         }
+
+        None
     }
 
     fn update(&mut self, msg: Message) -> Option<Message> {

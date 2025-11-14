@@ -13,29 +13,19 @@ anyhow = "1.0.97"
 rand = "0.9.0"
 rand_core = "0.6.4"
 wana_kana = "4.0.0"
-tachyonfx = "0.13.0"
-tui-rain = "1.0.1"
 tokio = { version = "1.44.2" }#, features = ["full"] }
 futures = "0.3.31"
-tui-big-text = "0.7.1"
-#ratatui-image = "5.0.0"
-#image = "0.25.6"
 rand_pcg = "0.9.0"
-ansi-to-tui = "7.0.0"
 rascii_art = "0.4.5"
 clap = { version = "4.5.37", features = ["derive"] }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.3", features = ["wasm_js"] }
+ratzilla = "0.2.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 ratatui = "0.29.0"
-
-# [target.'cfg(target_arch = "wasm32")'.dependencies.tokio]
-# version = "1"
-# default-features = false
-# features = ["rt"]
-
-
-# [dev-dependencies]
-# crossterm = "0.29.0"
+tachyonfx = "0.13.0"
+tui-rain = "1.0.1"
+tui-big-text = "0.7.1"
+ansi-to-tui = "7.0.0"

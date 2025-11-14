@@ -1,17 +1,10 @@
 use kanash_components::{app::App, Components};
 
-use std::{cell::RefCell, io, rc::Rc};
-
-use ratzilla::ratatui::{
-    layout::Alignment,
-    style::Color,
-    widgets::{Block, Paragraph},
-    Terminal,
-};
-
+use ratzilla::ratatui::Terminal;
 use ratzilla::{event::KeyCode, DomBackend, WebRenderer};
 
-use std::time::{Duration, Instant};
+use std::io;
+use web_time::Instant;
 
 fn main() -> io::Result<()> {
     let backend = DomBackend::new()?;
@@ -20,19 +13,14 @@ fn main() -> io::Result<()> {
     let mut app = App::new();
     let start_time = Instant::now();
 
-    let _ = terminal.draw_web(move |f| {
-        f.render_widget(
-            Paragraph::new(format!("Hey there"))
-                .alignment(Alignment::Center)
-                .block(
-                    Block::bordered()
-                        .title("Ratzilla")
-                        .title_alignment(Alignment::Center)
-                        .border_style(Color::Yellow),
-                ),
-            f.area(),
-        );
-    });
+    terminal.draw_web(move |f| {
+        app.view(f, start_time.elapsed());
 
+        let mut current_msg = app.handle_event();
+
+        while current_msg.is_some() {
+            current_msg = app.update(current_msg.unwrap());
+        }
+    });
     Ok(())
 }

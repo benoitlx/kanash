@@ -61,9 +61,10 @@ impl Components for HomeModel {
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self) -> Option<Message> {
+        #[cfg(not(target_arch = "wasm32"))]
         if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
-                match key.code {
+                return match key.code {
                     KeyCode::Esc => Some(Message::Back),
                     KeyCode::Enter => {
                         if let Some(i) = self.state.selected() {
@@ -82,13 +83,15 @@ impl Components for HomeModel {
                     KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
                     KeyCode::Char('b') => Some(Message::Home(HomeMessage::Background)),
                     _ => None,
-                }
+                };
             } else {
-                None
+                return None;
             }
         } else {
-            None
+            return None;
         }
+
+        None
     }
 
     fn update(&mut self, msg: Message) -> Option<Message> {
