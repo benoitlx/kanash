@@ -926,6 +926,7 @@ dependencies = [
  "tui-rain",
  "wana_kana",
  "web-sys",
+ "web-time",
 ]
 
 [[package]]

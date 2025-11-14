@@ -1,5 +1,3 @@
-use std::time::UNIX_EPOCH;
-
 // use crate::components::helper::image;
 use crate::helper::ja::random_kana;
 use rand::SeedableRng;
@@ -46,12 +44,16 @@ impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
         let mut r = Pcg64Mcg::seed_from_u64(
-            // TODO) Non std seed
-            // std::time::SystemTime::now()
-            //     .duration_since(UNIX_EPOCH)
-            //     .unwrap()
-            //     .as_secs(),
-            63,
+            #[cfg(not(target_arch = "wasm32"))]
+            std::time::SystemTime::now()
+                .duration_since(std::time::SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
+            #[cfg(target_arch = "wasm32")]
+            web_time::SystemTime::now()
+                .duration_since(web_time::SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
         );
         Self {
             shown: 0,
