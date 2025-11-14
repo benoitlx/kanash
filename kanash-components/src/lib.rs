@@ -25,8 +25,9 @@ pub use ratzilla::ratatui::{
     widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
     Frame,
 };
+
 #[cfg(target_arch = "wasm32")]
-use ratzilla::event::KeyCode;
+pub use ratzilla::web_sys::console;
 
 use std::time::Duration;
 
@@ -57,7 +58,11 @@ pub enum Message {
 pub trait Components {
     fn new() -> Self;
 
+    #[cfg(not(target_arch = "wasm32"))]
     fn handle_event(&self) -> Option<Message>;
+
+    #[cfg(target_arch = "wasm32")]
+    fn handle_event(&self, event: &ratzilla::event::KeyEvent) -> Option<Message>;
 
     fn update(&mut self, msg: Message) -> Option<Message>;
 

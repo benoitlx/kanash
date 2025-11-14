@@ -11,4 +11,5 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 [dependencies]
 kanash-components = { path = "../kanash-components/" }
 ratzilla = "0.2.0"
+web-sys = "0.3.82"
 web-time = "1.1.0"

@@ -45,12 +45,16 @@ pub enum KanaMessage {
 impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
+        console::log_1(&format!("hellow miaou").into());
         let mut r = Pcg64Mcg::seed_from_u64(
-            std::time::SystemTime::now()
-                .duration_since(UNIX_EPOCH)
-                .unwrap()
-                .as_secs(),
+            // TODO) Non std seed
+            // std::time::SystemTime::now()
+            //     .duration_since(UNIX_EPOCH)
+            //     .unwrap()
+            //     .as_secs(),
+            63,
         );
+        console::log_1(&format!("miaou ?").into());
         Self {
             shown: 0,
             correct: 0,
@@ -63,8 +67,8 @@ impl Components for KanaModel {
     }
 
     /// Handle Event (Mostly convert key event to message)
+    #[cfg(not(target_arch = "wasm32"))]
     fn handle_event(&self) -> Option<Message> {
-        #[cfg(not(target_arch = "wasm32"))]
         if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
@@ -83,6 +87,19 @@ impl Components for KanaModel {
 
         #[cfg(target_arch = "wasm32")]
         None
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn handle_event(&self, key_event: &ratzilla::event::KeyEvent) -> Option<Message> {
+        use ratzilla::event::KeyCode;
+
+        match key_event.code {
+            KeyCode::Esc => Some(Message::Back),
+            KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
+            KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
+            KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
+            _ => None,
+        }
     }
 
     fn update(&mut self, msg: Message) -> Option<Message> {

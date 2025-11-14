@@ -46,10 +46,19 @@ impl Components for App {
         }
     }
 
+    #[cfg(not(target_arch = "wasm32"))]
     fn handle_event(&self) -> Option<Message> {
         match &self.page {
             AppPage::Home(h) => h.handle_event(),
             AppPage::Kana(k) => k.handle_event(),
+        }
+    }
+
+    #[cfg(target_arch = "wasm32")]
+    fn handle_event(&self, event: &ratzilla::event::KeyEvent) -> Option<Message> {
+        match &self.page {
+            AppPage::Home(h) => h.handle_event(event),
+            AppPage::Kana(k) => k.handle_event(event),
         }
     }
 
@@ -101,10 +110,13 @@ impl Components for App {
 
                 // transform self en App::Kana(new_kana(selected)) if msg == Message::Home(Enter)
                 if let Message::Home(HomeMessage::Enter(mode)) = msg {
+                    console::log_1(&format!("hellow there").into());
                     let mut new_kana = KanaModel::new();
+                    console::log_1(&format!("w there").into());
 
                     new_kana.mode = mode;
                     new_kana.update(Message::Kana(KanaMessage::Pass));
+                    console::log_1(&format!("hell there").into());
 
                     self.page = AppPage::Kana(new_kana);
                 }
@@ -127,7 +139,6 @@ impl Components for App {
     }
 
     fn view(&mut self, frame: &mut Frame, elapsed: Duration) {
-
         #[cfg(not(target_arch = "wasm32"))]
         if !self.disable_background {
             self.background(frame);

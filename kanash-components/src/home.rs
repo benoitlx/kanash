@@ -60,8 +60,8 @@ impl Components for HomeModel {
     }
 
     /// Handle Event (Mostly convert key event to message)
+    #[cfg(not(target_arch = "wasm32"))]
     fn handle_event(&self) -> Option<Message> {
-        #[cfg(not(target_arch = "wasm32"))]
         if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
                 match key.code {
@@ -90,9 +90,32 @@ impl Components for HomeModel {
         } else {
             None
         }
+    }
 
-        #[cfg(target_arch = "wasm32")]
-        None
+    #[cfg(target_arch = "wasm32")]
+    fn handle_event(&self, event: &ratzilla::event::KeyEvent) -> Option<Message> {
+        use ratzilla::event::KeyCode;
+
+        match event.code {
+            KeyCode::Esc => Some(Message::Back),
+            KeyCode::Enter => {
+                if let Some(i) = self.state.selected() {
+                    match i {
+                        0 => Some(Message::Home(HomeMessage::Enter(Mode::Hira))),
+                        1 => Some(Message::Home(HomeMessage::Enter(Mode::Kata))),
+                        2 => Some(Message::Home(HomeMessage::Enter(Mode::Both))),
+                        _ => None,
+                    }
+                } else {
+                    None
+                }
+            }
+            KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
+            KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
+            KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
+            KeyCode::Char('b') => Some(Message::Home(HomeMessage::Background)),
+            _ => None,
+        }
     }
 
     fn update(&mut self, msg: Message) -> Option<Message> {
