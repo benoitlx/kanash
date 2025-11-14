@@ -110,13 +110,10 @@ impl Components for App {
 
                 // transform self en App::Kana(new_kana(selected)) if msg == Message::Home(Enter)
                 if let Message::Home(HomeMessage::Enter(mode)) = msg {
-                    console::log_1(&format!("hellow there").into());
                     let mut new_kana = KanaModel::new();
-                    console::log_1(&format!("w there").into());
 
                     new_kana.mode = mode;
                     new_kana.update(Message::Kana(KanaMessage::Pass));
-                    console::log_1(&format!("hell there").into());
 
                     self.page = AppPage::Kana(new_kana);
                 }

@@ -45,7 +45,6 @@ pub enum KanaMessage {
 impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
-        console::log_1(&format!("hellow miaou").into());
         let mut r = Pcg64Mcg::seed_from_u64(
             // TODO) Non std seed
             // std::time::SystemTime::now()
@@ -54,7 +53,6 @@ impl Components for KanaModel {
             //     .as_secs(),
             63,
         );
-        console::log_1(&format!("miaou ?").into());
         Self {
             shown: 0,
             correct: 0,
