@@ -67,20 +67,21 @@ impl Components for KanaModel {
         #[cfg(not(target_arch = "wasm32"))]
         if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
-                return match key.code {
+                match key.code {
                     KeyCode::Esc => Some(Message::Back),
                     KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
                     KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
                     KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
                     _ => None,
-                };
+                }
             } else {
-                return None;
+                None
             }
         } else {
-            return None;
+            None
         }
 
+        #[cfg(target_arch = "wasm32")]
         None
     }
 

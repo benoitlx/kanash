@@ -1,13 +1,13 @@
 use kanash_components::{app::App, Components};
 
 use ratzilla::ratatui::Terminal;
-use ratzilla::{event::KeyCode, DomBackend, WebRenderer};
+use ratzilla::{WebGl2Backend, WebRenderer};
 
 use std::io;
 use web_time::Instant;
 
 fn main() -> io::Result<()> {
-    let backend = DomBackend::new()?;
+    let backend = WebGl2Backend::new()?;
     let terminal = Terminal::new(backend)?;
 
     let mut app = App::new();

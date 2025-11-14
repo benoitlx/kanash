@@ -64,7 +64,7 @@ impl Components for HomeModel {
         #[cfg(not(target_arch = "wasm32"))]
         if event::poll(Duration::from_millis(10)).unwrap() {
             if let Event::Key(key) = event::read().unwrap() {
-                return match key.code {
+                match key.code {
                     KeyCode::Esc => Some(Message::Back),
                     KeyCode::Enter => {
                         if let Some(i) = self.state.selected() {
@@ -83,14 +83,15 @@ impl Components for HomeModel {
                     KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
                     KeyCode::Char('b') => Some(Message::Home(HomeMessage::Background)),
                     _ => None,
-                };
+                }
             } else {
-                return None;
+                None
             }
         } else {
-            return None;
+            None
         }
 
+        #[cfg(target_arch = "wasm32")]
         None
     }
 
