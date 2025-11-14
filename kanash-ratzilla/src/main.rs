@@ -21,7 +21,7 @@ fn main() -> io::Result<()> {
     let terminal = Terminal::new(backend)?;
 
     let mut app = App::new();
-    let new_app = App::new();
+    let mut new_app = App::new();
     let start_time = Instant::now();
 
     let outbox: Outbox<kanash_components::Message> = new_outbox();
@@ -36,6 +36,7 @@ fn main() -> io::Result<()> {
 
             if let Some(msg) = current_msg {
                 *outbox_cb.borrow_mut() = Some(msg);
+                new_app.update(current_msg.unwrap());
             }
         }
     });

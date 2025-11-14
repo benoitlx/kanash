@@ -27,7 +27,7 @@ pub struct KanaModel {
     pub mode: Mode,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum KanaMessage {
     /// reveal the answer
     Answer,

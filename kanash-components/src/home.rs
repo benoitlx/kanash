@@ -9,7 +9,7 @@ const SELECTED_STYLE: Style = Style::new()
     .bg(ColorPalette::SELECTION)
     .add_modifier(Modifier::BOLD);
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Mode {
     Hira,
     Kata,
@@ -30,7 +30,7 @@ pub struct HomeModel {
     pub key_helper_state: BackgroundMode,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum HomeMessage {
     /// Launch a Page
     Enter(Mode),

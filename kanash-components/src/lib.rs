@@ -46,7 +46,7 @@ impl ColorPalette {
     // #99ff33
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Message {
     /// Go to the previous page or quit the app
     Back,
