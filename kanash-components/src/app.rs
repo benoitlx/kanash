@@ -46,16 +46,7 @@ impl Components for App {
         }
     }
 
-    #[cfg(not(target_arch = "wasm32"))]
-    fn handle_event(&self) -> Option<Message> {
-        match &self.page {
-            AppPage::Home(h) => h.handle_event(),
-            AppPage::Kana(k) => k.handle_event(),
-        }
-    }
-
-    #[cfg(target_arch = "wasm32")]
-    fn handle_event(&self, event: &ratzilla::event::KeyEvent) -> Option<Message> {
+    fn handle_event(&self, event: &PlatformKeyEvent) -> Option<Message> {
         match &self.page {
             AppPage::Home(h) => h.handle_event(event),
             AppPage::Kana(k) => k.handle_event(event),
