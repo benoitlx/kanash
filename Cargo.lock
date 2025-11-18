@@ -898,7 +898,7 @@ dependencies = [
  "rand_pcg 0.9.0",
  "rascii_art",
  "ratatui",
- "tachyonfx",
+ "tachyonfx 0.13.0",
  "tokio",
  "tui-big-text",
  "tui-rain",
@@ -920,7 +920,7 @@ dependencies = [
  "rascii_art",
  "ratatui",
  "ratzilla",
- "tachyonfx",
+ "tachyonfx 0.13.0",
  "tokio",
  "tui-big-text",
  "tui-rain",
@@ -935,6 +935,9 @@ version = "0.1.0"
 dependencies = [
  "kanash-components",
  "ratzilla",
+ "tachyonfx 0.20.1",
+ "tui-big-text",
+ "wasm-bindgen",
  "web-sys",
  "web-time",
 ]
@@ -1538,6 +1541,20 @@ dependencies = [
  "ratatui",
  "simple-easing",
  "thiserror 2.0.17",
+]
+
+[[package]]
+name = "tachyonfx"
+version = "0.20.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a3d8d12f9a009654ae418254aa361dd61d9f9a581bcc27d024f39cb7ccaee33f"
+dependencies = [
+ "bon",
+ "compact_str 0.9.0",
+ "ratatui",
+ "thiserror 2.0.17",
+ "unicode-width 0.2.0",
+ "web-time",
 ]
 
 [[package]]
