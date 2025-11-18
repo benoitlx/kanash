@@ -16,9 +16,9 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "anpa"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dbd042758b51a8f57b0e4777d1d14a49db0c0a04d2b21ceae3f64d7a066384b1"
+checksum = "4d032745fe46100dbcb28ee6e30f12c4b148786f8889e07cd0a3445eeb54970f"
 
 [[package]]
 name = "ansi-to-tui"
@@ -237,12 +237,6 @@ name = "colorchoice"
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b05b61dc5112cbb17e4b6cd61790d9845d13888356391624cbe7e41efeac1e75"
-
-[[package]]
-name = "colorsys"
-version = "0.6.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "54261aba646433cb567ec89844be4c4825ca92a4f8afba52fc4dd88436e31bbd"
 
 [[package]]
 name = "compact_str"
@@ -1303,12 +1297,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e3a9fe34e3e7a50316060351f37187a3f546bce95496156754b601a5fa71b76e"
 
 [[package]]
-name = "simple-easing"
-version = "1.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "832ddd7df0d98d6fd93b973c330b7c8e0742d5cb8f1afc7dea89dba4d2531aa1"
-
-[[package]]
 name = "slab"
 version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1377,17 +1365,16 @@ dependencies = [
 
 [[package]]
 name = "tachyonfx"
-version = "0.13.0"
+version = "0.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e12f441a3aa6821a20ebc350e51139806c875551910e8ac067f663e4ab28e82"
+checksum = "a3d8d12f9a009654ae418254aa361dd61d9f9a581bcc27d024f39cb7ccaee33f"
 dependencies = [
  "anpa",
  "bon",
- "colorsys",
  "compact_str 0.9.0",
  "ratatui",
- "simple-easing",
  "thiserror 2.0.17",
+ "unicode-width 0.2.0",
 ]
 
 [[package]]
