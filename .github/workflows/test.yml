@@ -22,5 +22,5 @@ jobs:
       - run: rustup target add wasm32-unknown-unknown
       - run: cargo build -p kanash
       - run: cargo build --target wasm32-unknown-unknown -p kanash-ratzilla
-      - run: cargo test --verbose --exclude kanash-ratzilla
+      - run: cargo test --verbose --workspace --exclude kanash-ratzilla
       - run: cargo fmt --check
