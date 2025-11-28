@@ -9,8 +9,11 @@ license = "MIT"
 keywords = ["ratatui", "learning", "japanese", "TUI"]
 
 [dependencies]
+beamterm-atlas = "0.8.0"
 kanash-components = { path = "../kanash-components/" }
-ratzilla = "0.2.0"
+# ratzilla = "0.2.0"
+# ratzilla = { path = "../../ratzilla/" }
+ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
 tachyonfx = { version = "0.20.1", default-features = false, features = ["wasm"] }
 tui-big-text = "0.7.3"
 wasm-bindgen = "0.2.105"

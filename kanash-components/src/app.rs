@@ -1,7 +1,6 @@
 use super::{home::HomeModel, kana::KanaModel, *};
-
-#[cfg(not(target_arch = "wasm32"))]
 use crate::helper::rain;
+
 #[cfg(not(target_arch = "wasm32"))]
 use ansi_to_tui::IntoText;
 #[cfg(not(target_arch = "wasm32"))]
@@ -132,7 +131,6 @@ impl Components for App {
             self.background(frame);
         }
 
-        #[cfg(not(target_arch = "wasm32"))]
         if !self.disable_rain {
             rain::view(frame, elapsed);
         }

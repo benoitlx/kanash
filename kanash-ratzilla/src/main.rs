@@ -1,6 +1,6 @@
 use kanash_components::{app::App, ColorPalette, Components};
 
-use ratzilla::backend::webgl2::WebGl2BackendOptions;
+use ratzilla::backend::webgl2::{FontAtlasData, WebGl2BackendOptions};
 use ratzilla::ratatui::{
     layout::{Constraint, Layout},
     style::Style,
@@ -19,13 +19,15 @@ use std::{cell::RefCell, rc::Rc};
 
 type Outbox<T> = Rc<RefCell<Option<T>>>;
 
-fn new_outbox<T>() -> Outbox<T> {
-    Rc::new(RefCell::new(None))
-}
+static ATLAS_BYTES: &[u8] = include_bytes!("../bitmap_font.atlas");
 
 fn main() -> io::Result<()> {
-    let webgl2_options = WebGl2BackendOptions::new().fallback_glyph("@");
-    let backend = WebGl2Backend::new_with_options(webgl2_options)?;
+    // let webgl2_options = WebGl2BackendOptions::new()
+    //     .fallback_glyph("@")
+    //     .font_atlas(FontAtlasData::from_binary(ATLAS_BYTES).unwrap());
+    // let backend = WebGl2Backend::new_with_options(webgl2_options)?;
+    let backend = DomBackend::new()?;
+    // let backend = CanvasBackend::new()?;
     let terminal = Terminal::new(backend)?;
 
     let mut render_app = App::new();
@@ -34,7 +36,7 @@ fn main() -> io::Result<()> {
 
     let mut fade_effect = fx::dissolve(2000); //(20000, Interpolation::QuadOut));
 
-    let outbox: Outbox<kanash_components::Message> = new_outbox();
+    let outbox: Outbox<kanash_components::Message> = Rc::new(RefCell::new(None));
     let outbox_event = Rc::clone(&outbox);
 
     terminal.on_key_event({

@@ -18,13 +18,16 @@ futures = "0.3.31"
 rand_pcg = "0.9.0"
 rascii_art = "0.4.5"
 clap = { version = "4.5.37", features = ["derive"] }
+tui-rain = "1.0.1"
 
 [dev-dependencies]
 web-sys = "0.3.82"
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.3", features = ["wasm_js"] }
-ratzilla = "0.2.0"
+# ratzilla = "0.2.0"
+# ratzilla = { path = "../../ratzilla/" }
+ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
 web-time = "1.1.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
