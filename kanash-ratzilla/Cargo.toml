@@ -9,7 +9,6 @@ license = "MIT"
 keywords = ["ratatui", "learning", "japanese", "TUI"]
 
 [dependencies]
-beamterm-atlas = "0.8.0"
 kanash-components = { path = "../kanash-components/" }
 # ratzilla = "0.2.0"
 # ratzilla = { path = "../../ratzilla/" }
