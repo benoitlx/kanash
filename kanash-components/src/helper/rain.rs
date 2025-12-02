@@ -1,7 +1,16 @@
+#[cfg(not(target_arch = "wasm32"))]
 use ratatui::{style::Color, Frame};
+
+#[cfg(not(target_arch = "wasm32"))]
 use std::time::Duration;
 
-use super::background::{CharacterSet, Rain, RainDensity, RainSpeed};
+#[cfg(target_arch = "wasm32")]
+use ratzilla::ratatui::{style::Color, Frame};
+
+#[cfg(target_arch = "wasm32")]
+use web_time::Duration;
+
+use tui_rain::{CharacterSet, Rain, RainDensity, RainSpeed};
 
 const TAIL_COLOR: Color = Color::from_u32(0x0008dbbe);
 
@@ -17,7 +26,7 @@ pub fn view(frame: &mut Frame, elapsed: Duration) {
         .clone()
         .with_character_set(CharacterSet::HalfKana)
         .with_tail_lifespan(Duration::from_millis(120))
-        .with_color(ratatui::style::Color::LightGreen);
+        .with_color(Color::LightGreen);
 
     frame.render_widget(rain, frame.area());
     frame.render_widget(kana_tail, frame.area());

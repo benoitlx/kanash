@@ -3,6 +3,7 @@ pub mod helper;
 pub mod home;
 pub mod kana;
 
+#[cfg(not(target_arch = "wasm32"))]
 pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     layout::{Constraint, Layout},
@@ -13,6 +14,26 @@ pub use ratatui::{
     widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
     Frame,
 };
+
+#[cfg(not(target_arch = "wasm32"))]
+pub type PlatformKeyEvent = ratatui::crossterm::event::KeyEvent;
+
+#[cfg(target_arch = "wasm32")]
+pub use ratzilla::ratatui::{
+    layout::{Constraint, Layout},
+    style::Stylize,
+    style::{palette::tailwind::SLATE, Color, Modifier, Style},
+    text::Line,
+    widgets::{Block, Paragraph},
+    widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
+    Frame,
+};
+
+#[cfg(target_arch = "wasm32")]
+pub type PlatformKeyEvent = ratzilla::event::KeyEvent;
+
+#[cfg(target_arch = "wasm32")]
+pub use ratzilla::{event::KeyCode, web_sys::console};
 
 use std::time::Duration;
 
@@ -31,7 +52,7 @@ impl ColorPalette {
     // #99ff33
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone)]
 pub enum Message {
     /// Go to the previous page or quit the app
     Back,
@@ -43,7 +64,7 @@ pub enum Message {
 pub trait Components {
     fn new() -> Self;
 
-    fn handle_event(&self) -> Option<Message>;
+    fn handle_event(&self, event: &PlatformKeyEvent) -> Option<Message>;
 
     fn update(&mut self, msg: Message) -> Option<Message>;
 

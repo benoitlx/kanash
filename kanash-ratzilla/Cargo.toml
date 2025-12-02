@@ -3,30 +3,21 @@ name = "kanash-ratzilla"
 version = "0.1.0"
 authors = ["Benoit Leroux <benoitleroux41@gmail.com>"]
 edition = "2021"
-description = "Learn Hiragana and Katakana in a terminal !"
+description = "Learn Hiragana and Katakana in a browser with terminal aesthetic!"
 repository = "https://github.com/benoitlx/kanash"
 license = "MIT"
 keywords = ["ratatui", "learning", "japanese", "TUI"]
 publish = false
 
 [dependencies]
-kanash-components = { path = "../kanash-components/", version = "0.1.4" }
-anyhow = "1.0.97"
-rand = "0.9.0"
-rand_core = "0.9.3"
-ratatui = "0.29.0"
-wana_kana = "4.0.0"
-tachyonfx = "0.20.1"
-tui-rain = "1.0.1"
-tokio = { version = "1.44.2", features = ["full"] }
-futures = "0.3.31"
-tui-big-text = "0.7.1"
-#ratatui-image = "5.0.0"
-#image = "0.25.6"
-rand_pcg = "0.9.0"
-ansi-to-tui = "7.0.0"
-rascii_art = "0.4.5"
-clap = { version = "4.5.53", features = ["derive"] }
+kanash-components = { path = "../kanash-components/" }
+# ratzilla = "0.2.0"
+# ratzilla = { path = "../../ratzilla/" }
+ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
+tachyonfx = { version = "0.20.1", default-features = false, features = ["wasm"] }
+tui-big-text = "0.7.3"
+wasm-bindgen = "0.2.105"
+web-time = "1.1.0"
 
 [dev-dependencies]
-crossterm = "0.29.0"
+web-sys = "0.3.82"

@@ -1,0 +1,2 @@
+[language-server.rust-analyzer.config]
+rust-analyzer.cargo.target = "wasm32-unknown-unknown"

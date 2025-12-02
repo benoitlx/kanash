@@ -1,6 +1,7 @@
 use kanash_components::app::App;
 use kanash_components::{ColorPalette, Components};
 
+use ratatui::crossterm::event::{self, *};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::text::Line;
 use ratatui::{restore, style::Style};
@@ -24,18 +25,9 @@ fn main() {
 
     let mut terminal = ratatui::init();
 
-    let mut app = App::new();
-    if let Some(path) = arg.path {
-        let assets = std::fs::read_dir(path)
-            .unwrap()
-            .map(|entry| entry.unwrap().path().to_str().unwrap().to_string())
-            .collect::<Vec<_>>();
-        app.background_paths = assets;
-    }
+    let mut fade_effect = fx::dissolve((20000, Interpolation::QuadOut));
 
     let start_time = Instant::now();
-
-    let mut fade_effect = fx::dissolve((20000, Interpolation::QuadOut));
 
     // Splash Screen Rendering
     while start_time.elapsed() < Duration::from_millis(2000) {
@@ -76,11 +68,25 @@ fn main() {
         });
     }
 
+    let mut app = App::new();
+    if let Some(path) = arg.path {
+        let assets = std::fs::read_dir(path)
+            .unwrap()
+            .map(|entry| entry.unwrap().path().to_str().unwrap().to_string())
+            .collect::<Vec<_>>();
+        app.background_paths = assets;
+    }
+
     // Main app rendering
     while !app.exit {
         let _ = terminal.draw(|frame| app.view(frame, start_time.elapsed()));
 
-        let mut current_msg = app.handle_event();
+        let mut current_msg = None;
+        if event::poll(Duration::from_millis(10)).unwrap() {
+            if let Event::Key(key) = event::read().unwrap() {
+                current_msg = app.handle_event(&key);
+            }
+        }
 
         while current_msg.is_some() {
             current_msg = app.update(current_msg.unwrap());

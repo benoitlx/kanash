@@ -1,5 +1,3 @@
-use std::time::UNIX_EPOCH;
-
 // use crate::components::helper::image;
 use crate::helper::ja::random_kana;
 use rand::SeedableRng;
@@ -27,7 +25,7 @@ pub struct KanaModel {
     pub mode: Mode,
 }
 
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum KanaMessage {
     /// reveal the answer
     Answer,
@@ -46,8 +44,14 @@ impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
         let mut r = Pcg64Mcg::seed_from_u64(
+            #[cfg(not(target_arch = "wasm32"))]
             std::time::SystemTime::now()
-                .duration_since(UNIX_EPOCH)
+                .duration_since(std::time::SystemTime::UNIX_EPOCH)
+                .unwrap()
+                .as_secs(),
+            #[cfg(target_arch = "wasm32")]
+            web_time::SystemTime::now()
+                .duration_since(web_time::SystemTime::UNIX_EPOCH)
                 .unwrap()
                 .as_secs(),
         );
@@ -63,21 +67,13 @@ impl Components for KanaModel {
     }
 
     /// Handle Event (Mostly convert key event to message)
-    fn handle_event(&self) -> Option<Message> {
-        if event::poll(Duration::from_millis(10)).unwrap() {
-            if let Event::Key(key) = event::read().unwrap() {
-                match key.code {
-                    KeyCode::Esc => Some(Message::Back),
-                    KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
-                    KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
-                    KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
-                    _ => None,
-                }
-            } else {
-                None
-            }
-        } else {
-            None
+    fn handle_event(&self, key_event: &PlatformKeyEvent) -> Option<Message> {
+        match key_event.code {
+            KeyCode::Esc => Some(Message::Back),
+            KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
+            KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
+            KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
+            _ => None,
         }
     }
 
