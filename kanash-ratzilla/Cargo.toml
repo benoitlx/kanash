@@ -7,7 +7,6 @@ description = "Learn Hiragana and Katakana in a browser with terminal aesthetic!
 repository = "https://github.com/benoitlx/kanash"
 license = "MIT"
 keywords = ["ratatui", "learning", "japanese", "TUI"]
-publish = false
 
 [dependencies]
 kanash-components = { path = "../kanash-components/" }
