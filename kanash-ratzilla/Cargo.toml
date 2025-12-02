@@ -10,7 +10,7 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 publish = false
 
 [dependencies]
-kanash-components = { path = "../kanash-components/" }
+kanash-components = { path = "../kanash-components/", version = "0.1.4" }
 anyhow = "1.0.97"
 rand = "0.9.0"
 rand_core = "0.9.3"
