@@ -1,6 +1,6 @@
 [package]
 name = "kanash"
-version = "0.1.4"
+version = "0.1.5"
 authors = ["Benoit Leroux <benoitleroux41@gmail.com>"]
 edition = "2021"
 description = "Learn Hiragana and Katakana in a terminal !"
