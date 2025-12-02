@@ -3,10 +3,11 @@ name = "kanash-components"
 version = "0.1.4"
 authors = ["Benoit Leroux <benoitleroux41@gmail.com>"]
 edition = "2021"
-description = "Learn Hiragana and Katakana in a terminal !"
+description = "Core library for kanash and kanash-ratzilla"
 repository = "https://github.com/benoitlx/kanash"
 license = "MIT"
 keywords = ["ratatui", "learning", "japanese", "TUI"]
+publish = false
 
 [dependencies]
 rand = "0.9.0"
@@ -19,8 +20,8 @@ rascii_art = "0.4.5"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.3", features = ["wasm_js"] }
 # ratzilla = "0.2.0"
-# ratzilla = { path = "../../ratzilla/" }
-ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
+ratzilla = { path = "../../ratzilla/" }
+# ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
 web-time = "1.1.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
