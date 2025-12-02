@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6](https://github.com/benoitlx/kanash/compare/kanash-v0.1.5...kanash-v0.1.6) - 2025-12-02
+
+### Other
+
+- update Cargo.toml dependencies
+
 ## [0.1.5](https://github.com/benoitlx/kanash/compare/kanash-v0.1.4...kanash-v0.1.5) - 2025-12-02
 
 ### Other
