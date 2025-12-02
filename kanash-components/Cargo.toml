@@ -7,6 +7,7 @@ description = "Learn Hiragana and Katakana in a terminal !"
 repository = "https://github.com/benoitlx/kanash"
 license = "MIT"
 keywords = ["ratatui", "learning", "japanese", "TUI"]
+publish = false
 
 [dependencies]
 anyhow = "1.0.97"
