@@ -20,8 +20,8 @@ rascii_art = "0.4.5"
 [target.'cfg(target_arch = "wasm32")'.dependencies]
 getrandom = { version = "0.3", features = ["wasm_js"] }
 # ratzilla = "0.2.0"
-ratzilla = { path = "../../ratzilla/" }
-# ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
+# ratzilla = { path = "../../ratzilla/" }
+ratzilla = { git = "https://github.com/benoitlx/ratzilla.git" }
 web-time = "1.1.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
