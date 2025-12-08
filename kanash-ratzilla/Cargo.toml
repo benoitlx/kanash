@@ -13,7 +13,7 @@ kanash-components = { path = "../kanash-components/" }
 # ratzilla = "0.2.0"
 # ratzilla = { path = "../../ratzilla/" }
 ratzilla = { git = "https://github.com/benoitlx/ratzilla.git", branch = "waiting-for-upstream" }
-tachyonfx = { version = "0.20.1", default-features = false, features = ["wasm"] }
+tachyonfx = { version = "0.21.0", default-features = false, features = ["wasm"] }
 tui-big-text = "0.7.3"
 wasm-bindgen = "0.2.105"
 web-time = "1.1.0"
