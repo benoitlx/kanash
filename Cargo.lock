@@ -892,6 +892,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
 
 [[package]]
+name = "micromath"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3c8dda44ff03a2f238717214da50f65d5a53b45cd213a7370424ffdb6fae815"
+
+[[package]]
 name = "minimal-lexical"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1379,13 +1385,14 @@ dependencies = [
 
 [[package]]
 name = "tachyonfx"
-version = "0.20.1"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a3d8d12f9a009654ae418254aa361dd61d9f9a581bcc27d024f39cb7ccaee33f"
+checksum = "de9d53c5afe979f7de9d5ba856c9829b118d6aca6335750201f1ada46bc198e2"
 dependencies = [
  "anpa",
  "bon",
  "compact_str 0.9.0",
+ "micromath",
  "ratatui",
  "thiserror 2.0.17",
  "unicode-width 0.2.0",
