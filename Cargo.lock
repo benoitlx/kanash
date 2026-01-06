@@ -109,12 +109,38 @@ dependencies = [
 ]
 
 [[package]]
+name = "beamterm-data"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1bf74a7c20e83a40e542c032c918f1b5653ad4a137b49b7063e61030983ce243"
+dependencies = [
+ "compact_str 0.9.0",
+ "miniz_oxide",
+]
+
+[[package]]
 name = "beamterm-renderer"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "11d0f031d2e6c679e46cfcd03c6443b760338467d2191423e8d7e663153ca670"
 dependencies = [
- "beamterm-data",
+ "beamterm-data 0.8.0",
+ "compact_str 0.9.0",
+ "console_error_panic_hook",
+ "js-sys",
+ "thiserror 2.0.17",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
+name = "beamterm-renderer"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c27cc93582c7ce0f7350adcd2e0ffe21237687ba6bfb67cdea15e6e37001d19f"
+dependencies = [
+ "beamterm-data 0.10.0",
  "compact_str 0.9.0",
  "console_error_panic_hook",
  "js-sys",
@@ -806,7 +832,7 @@ dependencies = [
  "rand_pcg 0.9.0",
  "rascii_art",
  "ratatui",
- "ratzilla",
+ "ratzilla 0.2.0 (git+https://github.com/benoitlx/ratzilla.git?branch=waiting-for-upstream)",
  "tui-rain",
  "wana_kana",
  "web-time",
@@ -817,7 +843,7 @@ name = "kanash-ratzilla"
 version = "0.1.0"
 dependencies = [
  "kanash-components",
- "ratzilla",
+ "ratzilla 0.2.0 (git+https://github.com/orhun/ratzilla.git)",
  "tachyonfx",
  "tui-big-text",
  "wasm-bindgen",
@@ -1178,13 +1204,27 @@ name = "ratzilla"
 version = "0.2.0"
 source = "git+https://github.com/benoitlx/ratzilla.git?branch=waiting-for-upstream#f7eaa567483b2c444bb1ac17b5ceaf87f6c3785d"
 dependencies = [
- "beamterm-renderer",
+ "beamterm-renderer 0.8.0",
  "bitvec",
  "compact_str 0.9.0",
  "console_error_panic_hook",
  "ratatui",
  "thiserror 2.0.17",
  "unicode-width 0.2.0",
+ "web-sys",
+]
+
+[[package]]
+name = "ratzilla"
+version = "0.2.0"
+source = "git+https://github.com/orhun/ratzilla.git#7a4cc0f6b4e27d92b1b9d6db354ac619bd89cc92"
+dependencies = [
+ "beamterm-renderer 0.10.0",
+ "bitvec",
+ "compact_str 0.9.0",
+ "console_error_panic_hook",
+ "ratatui",
+ "thiserror 2.0.17",
  "web-sys",
 ]
 
