@@ -15,7 +15,7 @@ kanash-components = { path = "../kanash-components/" }
 # ratzilla = { git = "https://github.com/benoitlx/ratzilla.git", branch = "waiting-for-upstream" }
 ratzilla = { git = "https://github.com/orhun/ratzilla.git" }
 tachyonfx = { version = "0.21.0", default-features = false, features = ["wasm"] }
-tui-big-text = "0.7.3"
+tui-big-text = "0.8.1"
 wasm-bindgen = "0.2.105"
 web-time = "1.1.0"
 
