@@ -109,12 +109,38 @@ dependencies = [
 ]
 
 [[package]]
+name = "beamterm-data"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1bf74a7c20e83a40e542c032c918f1b5653ad4a137b49b7063e61030983ce243"
+dependencies = [
+ "compact_str 0.9.0",
+ "miniz_oxide",
+]
+
+[[package]]
 name = "beamterm-renderer"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "11d0f031d2e6c679e46cfcd03c6443b760338467d2191423e8d7e663153ca670"
 dependencies = [
- "beamterm-data",
+ "beamterm-data 0.8.0",
+ "compact_str 0.9.0",
+ "console_error_panic_hook",
+ "js-sys",
+ "thiserror 2.0.17",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
+]
+
+[[package]]
+name = "beamterm-renderer"
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c27cc93582c7ce0f7350adcd2e0ffe21237687ba6bfb67cdea15e6e37001d19f"
+dependencies = [
+ "beamterm-data 0.10.0",
  "compact_str 0.9.0",
  "console_error_panic_hook",
  "js-sys",
@@ -609,6 +635,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d9c4f5dac5e15c24eb999c26181a6ca40b39fe946cbe4c263c7209467bc83af2"
 
 [[package]]
+name = "foldhash"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb"
+
+[[package]]
 name = "font8x8"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -663,7 +695,18 @@ checksum = "9229cfe53dfd69f0609a49f65461bd93001ea1ef889cd5529dd176593f5338a1"
 dependencies = [
  "allocator-api2",
  "equivalent",
- "foldhash",
+ "foldhash 0.1.5",
+]
+
+[[package]]
+name = "hashbrown"
+version = "0.16.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "841d1cc9bed7f9236f321df977030373f4a4163ae1a7dbfe1a51a2c1a51d9100"
+dependencies = [
+ "allocator-api2",
+ "equivalent",
+ "foldhash 0.2.0",
 ]
 
 [[package]]
@@ -806,7 +849,7 @@ dependencies = [
  "rand_pcg 0.9.0",
  "rascii_art",
  "ratatui",
- "ratzilla",
+ "ratzilla 0.2.0 (git+https://github.com/benoitlx/ratzilla.git?branch=waiting-for-upstream)",
  "tui-rain",
  "wana_kana",
  "web-time",
@@ -817,12 +860,22 @@ name = "kanash-ratzilla"
 version = "0.1.0"
 dependencies = [
  "kanash-components",
- "ratzilla",
+ "ratzilla 0.2.0 (git+https://github.com/orhun/ratzilla.git)",
  "tachyonfx",
  "tui-big-text",
  "wasm-bindgen",
  "web-sys",
  "web-time",
+]
+
+[[package]]
+name = "kasuari"
+version = "0.4.11"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8fe90c1150662e858c7d5f945089b7517b0a80d8bf7ba4b1b5ffc984e7230a5b"
+dependencies = [
+ "hashbrown 0.16.1",
+ "thiserror 2.0.17",
 ]
 
 [[package]]
@@ -882,7 +935,16 @@ version = "0.12.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "234cf4f4a04dc1f57e24b96cc0cd600cf2af460d4161ac5ecdd0af8e1f3b2a38"
 dependencies = [
- "hashbrown",
+ "hashbrown 0.15.5",
+]
+
+[[package]]
+name = "lru"
+version = "0.16.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "96051b46fc183dc9cd4a223960ef37b9af631b55191852a8274bfef064cda20f"
+dependencies = [
+ "hashbrown 0.16.1",
 ]
 
 [[package]]
@@ -1164,12 +1226,32 @@ dependencies = [
  "indoc",
  "instability",
  "itertools 0.13.0",
- "lru",
+ "lru 0.12.5",
  "paste",
- "strum",
+ "strum 0.26.3",
  "time",
  "unicode-segmentation",
- "unicode-truncate",
+ "unicode-truncate 1.1.0",
+ "unicode-width 0.2.0",
+]
+
+[[package]]
+name = "ratatui-core"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5ef8dea09a92caaf73bff7adb70b76162e5937524058a7e5bff37869cbbec293"
+dependencies = [
+ "bitflags 2.10.0",
+ "compact_str 0.9.0",
+ "hashbrown 0.16.1",
+ "indoc",
+ "itertools 0.14.0",
+ "kasuari",
+ "lru 0.16.2",
+ "strum 0.27.2",
+ "thiserror 2.0.17",
+ "unicode-segmentation",
+ "unicode-truncate 2.0.0",
  "unicode-width 0.2.0",
 ]
 
@@ -1178,13 +1260,27 @@ name = "ratzilla"
 version = "0.2.0"
 source = "git+https://github.com/benoitlx/ratzilla.git?branch=waiting-for-upstream#f7eaa567483b2c444bb1ac17b5ceaf87f6c3785d"
 dependencies = [
- "beamterm-renderer",
+ "beamterm-renderer 0.8.0",
  "bitvec",
  "compact_str 0.9.0",
  "console_error_panic_hook",
  "ratatui",
  "thiserror 2.0.17",
  "unicode-width 0.2.0",
+ "web-sys",
+]
+
+[[package]]
+name = "ratzilla"
+version = "0.2.0"
+source = "git+https://github.com/orhun/ratzilla.git#7a4cc0f6b4e27d92b1b9d6db354ac619bd89cc92"
+dependencies = [
+ "beamterm-renderer 0.10.0",
+ "bitvec",
+ "compact_str 0.9.0",
+ "console_error_panic_hook",
+ "ratatui",
+ "thiserror 2.0.17",
  "web-sys",
 ]
 
@@ -1356,7 +1452,16 @@ version = "0.26.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8fec0f0aef304996cf250b31b5a10dee7980c85da9d759361292b8bca5a18f06"
 dependencies = [
- "strum_macros",
+ "strum_macros 0.26.4",
+]
+
+[[package]]
+name = "strum"
+version = "0.27.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af23d6f6c1a224baef9d3f61e287d2761385a5b88fdab4eb4c6f11aeb54c4bcf"
+dependencies = [
+ "strum_macros 0.27.2",
 ]
 
 [[package]]
@@ -1369,6 +1474,18 @@ dependencies = [
  "proc-macro2",
  "quote",
  "rustversion",
+ "syn",
+]
+
+[[package]]
+name = "strum_macros"
+version = "0.27.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7695ce3845ea4b33927c055a39dc438a45b059f7c1b3d91d38d10355fb8cbca7"
+dependencies = [
+ "heck",
+ "proc-macro2",
+ "quote",
  "syn",
 ]
 
@@ -1479,14 +1596,14 @@ checksum = "40868e7c1d2f0b8d73e4a8c7f0ff63af4f6d19be117e90bd73eb1d62cf831c6b"
 
 [[package]]
 name = "tui-big-text"
-version = "0.7.3"
+version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7876e22ef305de349de2ef40197455a84980f1597277ce7fb2008989b19c572"
+checksum = "0cb3cf7714229ca4503c1b94050bce7ae4f5bbcf9e5b3d24bee858f15ef23cef"
 dependencies = [
  "derive_builder",
  "font8x8",
  "itertools 0.14.0",
- "ratatui",
+ "ratatui-core",
 ]
 
 [[package]]
@@ -1521,6 +1638,17 @@ dependencies = [
  "itertools 0.13.0",
  "unicode-segmentation",
  "unicode-width 0.1.14",
+]
+
+[[package]]
+name = "unicode-truncate"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8fbf03860ff438702f3910ca5f28f8dac63c1c11e7efb5012b8b175493606330"
+dependencies = [
+ "itertools 0.13.0",
+ "unicode-segmentation",
+ "unicode-width 0.2.0",
 ]
 
 [[package]]
