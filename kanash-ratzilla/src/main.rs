@@ -22,11 +22,11 @@ type Outbox<T> = Rc<RefCell<Option<T>>>;
 static ATLAS_BYTES: &[u8] = include_bytes!("../bitmap_font.atlas");
 
 fn main() -> io::Result<()> {
-    // let webgl2_options = WebGl2BackendOptions::new()
-    //     .fallback_glyph("@")
-    //     .font_atlas(FontAtlasData::from_binary(ATLAS_BYTES).unwrap());
-    // let backend = WebGl2Backend::new_with_options(webgl2_options)?;
-    let backend = DomBackend::new()?;
+    let webgl2_options = WebGl2BackendOptions::new()
+        .fallback_glyph("@")
+        .font_atlas(FontAtlasData::from_binary(ATLAS_BYTES).unwrap());
+    let backend = WebGl2Backend::new_with_options(webgl2_options)?;
+    // let backend = DomBackend::new()?;
     // let backend = CanvasBackend::new()?;
     let terminal = Terminal::new(backend)?;
 
