@@ -26,4 +26,4 @@ web-time = "1.1.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 ratatui = "0.29.0"
-ansi-to-tui = "7.0.0"
+ansi-to-tui = "8.0.1"
