@@ -1,6 +1,6 @@
 services:
   kanash:
-    image: bleroux/kanash
+    image: blximages/kanash
     ports:
       - 80:8000
     restart: unless-stopped
