@@ -2,5 +2,5 @@ services:
   kanash:
     image: blximages/kanash
     ports:
-      - 80:8000
+      - 80:80
     restart: unless-stopped

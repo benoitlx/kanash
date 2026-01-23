@@ -26,7 +26,7 @@ paru -S kanash
 To expose it as a website:
 
 ```
-sudo docker run --rm -p 80:8000 blximages/kanash
+sudo docker run --rm -p 80:80 blximages/kanash
 ```
 
 To run it directly in your terminal:

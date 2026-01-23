@@ -12,12 +12,10 @@ RUN rustup target add x86_64-unknown-linux-musl
 RUN cd kanash-ratzilla && trunk build
 RUN cd kanash && cargo build --target x86_64-unknown-linux-musl
     
-FROM python:3
+FROM nginx:alpine
 
-COPY --from=builder /usr/src/kanash-ratzilla/dist/ /dist
+COPY --from=builder /usr/src/kanash-ratzilla/dist /usr/share/nginx/html
 COPY --from=builder /usr/src/kanash/target/x86_64-unknown-linux-musl/debug/kanash /usr/bin
-
-CMD ["python3", "-m", "http.server", "8000", "-d", "/dist"]
 
 # LABEL \
 #     org.opencontainers.image.title="kanash" \
