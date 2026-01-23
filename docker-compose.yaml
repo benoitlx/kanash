@@ -1,9 +1,6 @@
 services:
   kanash:
-    privileged: true
     image: bleroux/kanash
-    volumes:
-      - ./assets:/home/assets
     ports:
-      - 80:7681
+      - 80:8000
     restart: unless-stopped

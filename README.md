@@ -23,19 +23,16 @@ paru -S kanash
 
 ### From docker image
 
-To expose it as a website :
-
-> [!TIP]
-> replace `./assets` with a directory containing `jpg` and `png`
+To expose it as a website:
 
 ```
-docker run --rm -v ./assets:/home/assets -p "80:7681" blximages/kanash
+sudo docker run --rm -p 80:8000 bleroux/kanash
 ```
 
-To run it directly in your terminal
+To run it directly in your terminal:
 
 ```
-docker run --rm -v ./assets:/home/assets -it --entrypoint=/usr/bin/kanash blximages/kanash
+sudo docker run --rm -it --entrypoint=/usr/bin/kanash bleroux/kanash
 ```
 
 ### WASM build
