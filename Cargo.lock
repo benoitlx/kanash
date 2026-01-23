@@ -921,7 +921,7 @@ dependencies = [
 
 [[package]]
 name = "kanash"
-version = "0.1.5"
+version = "0.1.6"
 dependencies = [
  "ansi-to-tui",
  "clap",
@@ -939,7 +939,7 @@ dependencies = [
 
 [[package]]
 name = "kanash-components"
-version = "0.1.4"
+version = "0.1.6"
 dependencies = [
  "ansi-to-tui",
  "getrandom",
@@ -956,7 +956,7 @@ dependencies = [
 
 [[package]]
 name = "kanash-ratzilla"
-version = "0.1.0"
+version = "0.1.6"
 dependencies = [
  "kanash-components",
  "ratzilla",
