@@ -1,17 +1,16 @@
 FROM rust:latest AS builder
 
 # Copy sources inside the builder container
-COPY ./Cargo.lock ./Cargo.toml ./
-COPY ./src ./src
-RUN rustup target add x86_64-unknown-linux-musl
-RUN cargo build --target x86_64-unknown-linux-musl
+COPY ./ ./
+RUN cargo install --locked trunk
+RUN rustup target add wasm32-unknown-unknown
+RUN cd kanash-ratzilla && trunk build
     
-FROM alpine:latest
+FROM python:3
 
-COPY --from=builder /target/x86_64-unknown-linux-musl/debug/kanash /usr/bin
-RUN apk update && apk add ttyd
+COPY --from=builder /kanash-ratzilla/dist/ /dist
 
-CMD ["/usr/bin/ttyd", "-W", "/usr/bin/kanash", "--path", "/home/assets"]
+CMD ["python3", "-m", "http.server", "8000", "-d", "/dist"]
 
 # LABEL \
 #     org.opencontainers.image.title="kanash" \
