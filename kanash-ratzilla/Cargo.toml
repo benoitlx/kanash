@@ -1,6 +1,6 @@
 [package]
 name = "kanash-ratzilla"
-version = "0.1.0"
+version = "0.1.6"
 authors = ["Benoit Leroux <benoitleroux41@gmail.com>"]
 edition = "2021"
 description = "Learn Hiragana and Katakana in a browser with terminal aesthetic!"
