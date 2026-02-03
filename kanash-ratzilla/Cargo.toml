@@ -11,7 +11,7 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 [dependencies]
 kanash-components = { path = "../kanash-components/" }
 ratzilla = "0.3.0"
-tachyonfx = { version = "0.22.0", default-features = false, features = ["wasm"] }
+tachyonfx = { version = "0.23.0", default-features = false, features = ["wasm"] }
 tui-big-text = "0.8.1"
 wasm-bindgen = "0.2.105"
 web-time = "1.1.0"
