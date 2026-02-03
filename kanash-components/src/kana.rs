@@ -1,13 +1,8 @@
 // use crate::components::helper::image;
-use crate::helper::ja::random_kana;
-use rand::SeedableRng;
-use rand_pcg::{Mcg128Xsl64, Pcg64Mcg};
+use crate::helper::ja::*;
 use wana_kana::ConvertJapanese;
 
-use super::{
-    helper::ja::{random_hiragana, random_katakana},
-    *,
-};
+use super::*;
 
 const TITLE: &str = " Hiragana ";
 const LEFT_TITLE: &str = " Shown: ";
@@ -21,7 +16,6 @@ pub struct KanaModel {
     input: String,
     current_kana: String,
     display_answer: bool,
-    rng: Mcg128Xsl64,
     pub mode: Mode,
 }
 
@@ -43,25 +37,12 @@ pub enum KanaMessage {
 impl Components for KanaModel {
     /// Create a new kana model
     fn new() -> Self {
-        let mut r = Pcg64Mcg::seed_from_u64(
-            #[cfg(not(target_arch = "wasm32"))]
-            std::time::SystemTime::now()
-                .duration_since(std::time::SystemTime::UNIX_EPOCH)
-                .unwrap()
-                .as_secs(),
-            #[cfg(target_arch = "wasm32")]
-            web_time::SystemTime::now()
-                .duration_since(web_time::SystemTime::UNIX_EPOCH)
-                .unwrap()
-                .as_secs(),
-        );
         Self {
             shown: 0,
             correct: 0,
             input: String::new(),
-            current_kana: random_kana(&mut r),
+            current_kana: random_kana(),
             display_answer: false,
-            rng: r,
             mode: Mode::Hira,
         }
     }
@@ -97,9 +78,9 @@ impl Components for KanaModel {
                 KanaMessage::Pass => {
                     self.input = String::new();
                     match self.mode {
-                        Mode::Hira => self.current_kana = random_hiragana(&mut self.rng),
-                        Mode::Kata => self.current_kana = random_katakana(&mut self.rng),
-                        Mode::Both => self.current_kana = random_kana(&mut self.rng),
+                        Mode::Hira => self.current_kana = random_hiragana(),
+                        Mode::Kata => self.current_kana = random_katakana(),
+                        Mode::Both => self.current_kana = random_kana(),
                     }
 
                     None
