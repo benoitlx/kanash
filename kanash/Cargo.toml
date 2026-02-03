@@ -11,12 +11,8 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 [dependencies]
 kanash-components = { path = "../kanash-components/", version = "0.1.6" }
 ratatui = "0.30.0"
-wana_kana = "4.0.0"
 tachyonfx = "0.23.0"
 tui-big-text = "0.8.1"
-ansi-to-tui = "8.0.1"
-rascii_art = "0.4.5"
-clap = { version = "4.5.56", features = ["derive"] }
 
 [dev-dependencies]
 crossterm = "0.29.0"
