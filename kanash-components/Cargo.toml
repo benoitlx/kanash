@@ -10,7 +10,7 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 
 [dependencies]
 rand = "0.9.0"
-rand_core = "0.9.4"
+rand_core = "0.10.0"
 wana_kana = "4.0.0"
 tui-rain = { git = "https://github.com/SuperJappie08/tui-rain.git", branch = "ratatui-0.30.0" }
 rand_pcg = "0.9.0"
