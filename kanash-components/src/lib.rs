@@ -37,7 +37,7 @@ pub use ratzilla::{event::KeyCode, web_sys::console};
 
 use std::time::Duration;
 
-use home::{BackgroundMode, HomeMessage, Mode};
+use home::{HomeMessage, Mode};
 use kana::KanaMessage;
 
 pub struct ColorPalette;

@@ -26,7 +26,6 @@ pub enum BackgroundMode {
 pub struct HomeModel {
     page_list: Vec<String>,
     state: ListState,
-    pub background_state: BackgroundMode,
     pub key_helper_state: BackgroundMode,
 }
 
@@ -39,7 +38,6 @@ pub enum HomeMessage {
     Down,
 
     RainFx,
-    Background,
 }
 
 impl Components for HomeModel {
@@ -54,7 +52,6 @@ impl Components for HomeModel {
                 "Learn Both".into(),
             ],
             state: init_state,
-            background_state: BackgroundMode::Cycle,
             key_helper_state: BackgroundMode::Cycle,
         }
     }
@@ -78,7 +75,6 @@ impl Components for HomeModel {
             KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
             KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
             KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
-            KeyCode::Char('b') => Some(Message::Home(HomeMessage::Background)),
             _ => None,
         }
     }
