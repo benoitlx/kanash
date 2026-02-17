@@ -6,7 +6,7 @@ pub mod kana;
 #[cfg(not(target_arch = "wasm32"))]
 pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
-    layout::{Constraint, Layout},
+    layout::{Constraint, Flex, Layout, Rect},
     style::Stylize,
     style::{palette::tailwind::SLATE, Color, Modifier, Style},
     text::Line,
@@ -20,7 +20,7 @@ pub type PlatformKeyEvent = ratatui::crossterm::event::KeyEvent;
 
 #[cfg(target_arch = "wasm32")]
 pub use ratzilla::ratatui::{
-    layout::{Constraint, Layout},
+    layout::{Constraint, Flex, Layout},
     style::Stylize,
     style::{palette::tailwind::SLATE, Color, Modifier, Style},
     text::Line,

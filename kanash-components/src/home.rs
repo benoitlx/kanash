@@ -1,9 +1,5 @@
 use super::*;
 
-const KEY_HELPER_CYCLE: &str =
-    " Quit <Esc> | Move <j,Down,k,Up> | Select <Enter> | Rain <x> | Cycle Background <b> ";
-const KEY_HELPER_NONE: &str =
-    " Quit <Esc> | Move <j,Down,k,Up> | Select <Enter> | Rain <x> | No Background <b> ";
 const TITLE: &str = " KANA SH ";
 const SELECTED_STYLE: Style = Style::new()
     .bg(ColorPalette::SELECTION)
@@ -26,7 +22,7 @@ pub enum BackgroundMode {
 pub struct HomeModel {
     page_list: Vec<String>,
     state: ListState,
-    pub key_helper_state: BackgroundMode,
+    show_help_popup: bool,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -38,6 +34,8 @@ pub enum HomeMessage {
     Down,
 
     RainFx,
+
+    Help,
 }
 
 impl Components for HomeModel {
@@ -52,14 +50,14 @@ impl Components for HomeModel {
                 "Learn Both".into(),
             ],
             state: init_state,
-            key_helper_state: BackgroundMode::Cycle,
+            show_help_popup: false,
         }
     }
 
     /// Handle Event (Mostly convert key event to message)
     fn handle_event(&self, event: &PlatformKeyEvent) -> Option<Message> {
         match event.code {
-            KeyCode::Esc => Some(Message::Back),
+            KeyCode::Esc | KeyCode::Char('q') => Some(Message::Back),
             KeyCode::Enter => {
                 if let Some(i) = self.state.selected() {
                     match i {
@@ -75,6 +73,7 @@ impl Components for HomeModel {
             KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
             KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
             KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
+            KeyCode::Char('h') => Some(Message::Home(HomeMessage::Help)),
             _ => None,
         }
     }
@@ -88,6 +87,9 @@ impl Components for HomeModel {
                 HomeMessage::Up => {
                     self.state.select_previous();
                 }
+                HomeMessage::Help => {
+                    self.show_help_popup = !self.show_help_popup;
+                }
                 _ => {}
             }
         }
@@ -96,26 +98,19 @@ impl Components for HomeModel {
 
     fn view(&mut self, frame: &mut Frame, _elapsed: Duration) {
         let n_page: u16 = self.page_list.len().try_into().unwrap();
-        let [_, main_area, _] = Layout::vertical([
+        let [_, vert_area, _] = Layout::vertical([
             Constraint::Min(0),
             Constraint::Length(n_page + 4),
             Constraint::Min(0),
         ])
         .areas(frame.area());
 
-        let key_helper = match self.key_helper_state {
-            BackgroundMode::Cycle => KEY_HELPER_CYCLE,
-            BackgroundMode::Disable => KEY_HELPER_NONE,
-        };
+        let [_, main_area, _] =
+            Layout::horizontal([Constraint::Min(0), Constraint::Max(23), Constraint::Min(0)])
+                .areas(vert_area);
 
         let block = Block::new()
             .title(Line::from(TITLE).fg(ColorPalette::TITLE).centered())
-            .title_bottom(
-                Line::from(key_helper)
-                    .fg(ColorPalette::KEY_HINT)
-                    .bold()
-                    .centered(),
-            )
             .border_type(BorderType::Rounded)
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);
@@ -133,5 +128,21 @@ impl Components for HomeModel {
 
         frame.render_widget(Clear, main_area);
         frame.render_stateful_widget(list, main_area, &mut self.state);
+
+        if self.show_help_popup {
+            let block = Block::new().title("Help").borders(Borders::ALL);
+            let p = Paragraph::new(
+                "h - show this popup\njk - navigate up and down\nx - disable rain fx",
+            )
+            .block(block);
+
+            let vertical = Layout::vertical([Constraint::Percentage(30)]).flex(Flex::Center);
+            let horizontal = Layout::horizontal([Constraint::Percentage(50)]).flex(Flex::Center);
+            let [area] = vertical.areas(frame.area());
+            let [area] = horizontal.areas(area);
+
+            frame.render_widget(Clear, area);
+            frame.render_widget(p, area);
+        }
     }
 }
