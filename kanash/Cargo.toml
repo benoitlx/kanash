@@ -11,7 +11,7 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 [dependencies]
 kanash-components = { path = "../kanash-components/", version = "0.1.6" }
 ratatui = "0.30.0"
-tachyonfx = "0.23.0"
+tachyonfx = "0.24.0"
 tui-big-text = "0.8.2"
 
 [dev-dependencies]
