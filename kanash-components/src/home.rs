@@ -1,6 +1,8 @@
 use super::*;
 
 const TITLE: &str = " KANA SH ";
+const KEY_HELPER: &str = " help - <h?> ";
+const HELP_STRING: &str = "h? - toggle help popup\njk - navigate up and down\nx - disable rain fx\nEnter - enter the selected mode\nq Escape - quit";
 const SELECTED_STYLE: Style = Style::new()
     .bg(ColorPalette::SELECTION)
     .add_modifier(Modifier::BOLD);
@@ -72,8 +74,8 @@ impl Components for HomeModel {
             }
             KeyCode::Char('j') | KeyCode::Down => Some(Message::Home(HomeMessage::Down)),
             KeyCode::Char('k') | KeyCode::Up => Some(Message::Home(HomeMessage::Up)),
+            KeyCode::Char('h') | KeyCode::Char('?') => Some(Message::Home(HomeMessage::Help)),
             KeyCode::Char('x') => Some(Message::Home(HomeMessage::RainFx)),
-            KeyCode::Char('h') => Some(Message::Home(HomeMessage::Help)),
             _ => None,
         }
     }
@@ -111,6 +113,7 @@ impl Components for HomeModel {
 
         let block = Block::new()
             .title(Line::from(TITLE).fg(ColorPalette::TITLE).centered())
+            .title_bottom(Line::from(KEY_HELPER).fg(ColorPalette::KEY_HINT).centered())
             .border_type(BorderType::Rounded)
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);
@@ -130,11 +133,13 @@ impl Components for HomeModel {
         frame.render_stateful_widget(list, main_area, &mut self.state);
 
         if self.show_help_popup {
-            let block = Block::new().title("Help").borders(Borders::ALL);
-            let p = Paragraph::new(
-                "h - show this popup\njk - navigate up and down\nx - disable rain fx",
-            )
-            .block(block);
+            let block = Block::new()
+                .title("Help")
+                .border_type(BorderType::Rounded)
+                .borders(Borders::ALL);
+            let p = Paragraph::new(HELP_STRING)
+                .fg(ColorPalette::KEY_HINT)
+                .block(block);
 
             let vertical = Layout::vertical([Constraint::Percentage(30)]).flex(Flex::Center);
             let horizontal = Layout::horizontal([Constraint::Percentage(50)]).flex(Flex::Center);
