@@ -9,9 +9,11 @@ pub use ratatui::{
     layout::{Constraint, Flex, Layout, Rect},
     style::Stylize,
     style::{palette::tailwind::SLATE, Color, Modifier, Style},
-    text::Line,
-    widgets::{Block, Paragraph},
-    widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
+    text::{Line, Span, Text},
+    widgets::{
+        Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding,
+        Paragraph, Wrap,
+    },
     Frame,
 };
 
@@ -23,9 +25,11 @@ pub use ratzilla::ratatui::{
     layout::{Constraint, Flex, Layout},
     style::Stylize,
     style::{palette::tailwind::SLATE, Color, Modifier, Style},
-    text::Line,
-    widgets::{Block, Paragraph},
-    widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
+    text::{Line, Span, Text},
+    widgets::{
+        Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding,
+        Paragraph, Wrap,
+    },
     Frame,
 };
 

@@ -1,8 +1,16 @@
+use crate::helper::help_popup;
+
 use super::*;
 
 const TITLE: &str = " KANA SH ";
-const KEY_HELPER: &str = " help - <h?> ";
-const HELP_STRING: &str = "h? - toggle help popup\njk - navigate up and down\nx - disable rain fx\nEnter - enter the selected mode\nq Escape - quit";
+const KEY_HELPER: &str = " h - ? ";
+const HELP_STRINGS: [&str; 5] = [
+    "h? - toggle this popup",
+    "jk - navigate up and down",
+    "x - disable rain fx",
+    "Enter - enter selected mode",
+    "esc q - quit",
+];
 const SELECTED_STYLE: Style = Style::new()
     .bg(ColorPalette::SELECTION)
     .add_modifier(Modifier::BOLD);
@@ -100,16 +108,13 @@ impl Components for HomeModel {
 
     fn view(&mut self, frame: &mut Frame, _elapsed: Duration) {
         let n_page: u16 = self.page_list.len().try_into().unwrap();
-        let [_, vert_area, _] = Layout::vertical([
-            Constraint::Min(0),
-            Constraint::Length(n_page + 4),
-            Constraint::Min(0),
-        ])
-        .areas(frame.area());
+        let [vert_area] = Layout::vertical([Constraint::Length(n_page + 4)])
+            .flex(Flex::Center)
+            .areas(frame.area());
 
-        let [_, main_area, _] =
-            Layout::horizontal([Constraint::Min(0), Constraint::Max(23), Constraint::Min(0)])
-                .areas(vert_area);
+        let [main_area] = Layout::horizontal([Constraint::Max(23)])
+            .flex(Flex::Center)
+            .areas(vert_area);
 
         let block = Block::new()
             .title(Line::from(TITLE).fg(ColorPalette::TITLE).centered())
@@ -133,21 +138,7 @@ impl Components for HomeModel {
         frame.render_stateful_widget(list, main_area, &mut self.state);
 
         if self.show_help_popup {
-            let block = Block::new()
-                .title("Help")
-                .border_type(BorderType::Rounded)
-                .borders(Borders::ALL);
-            let p = Paragraph::new(HELP_STRING)
-                .fg(ColorPalette::KEY_HINT)
-                .block(block);
-
-            let vertical = Layout::vertical([Constraint::Percentage(30)]).flex(Flex::Center);
-            let horizontal = Layout::horizontal([Constraint::Percentage(50)]).flex(Flex::Center);
-            let [area] = vertical.areas(frame.area());
-            let [area] = horizontal.areas(area);
-
-            frame.render_widget(Clear, area);
-            frame.render_widget(p, area);
+            help_popup(HELP_STRINGS, 10, 30, frame);
         }
     }
 }
