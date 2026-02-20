@@ -3,6 +3,7 @@ use wana_kana::ConvertJapanese;
 use super::*;
 
 const TITLE: &str = " Hiragana ";
+const STATS_TITLE: &str = " Stats ";
 const LEFT_TITLE: &str = " Shown: ";
 const RIGHT_TITLE: &str = " Correct: ";
 const KEY_HELPER: &str = " ? ";
@@ -19,11 +20,13 @@ pub struct KanaModel {
     shown: u32,
     correct: u32,
     input: String,
-    current_kana: String,
+    current_kana: (String, usize),
     display_answer: bool,
     show_help_popup: bool,
     pub mode: Mode,
     pub scroll_state: ScrollbarState,
+    good_cnts: [usize; HIRAGANA_NUMBER + KATAKANA_NUMBER],
+    bad_cnts: [usize; HIRAGANA_NUMBER + KATAKANA_NUMBER],
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -59,6 +62,8 @@ impl Components for KanaModel {
             show_help_popup: false,
             mode: Mode::Hira,
             scroll_state: ScrollbarState::new(HIRAGANA_NUMBER),
+            good_cnts: [0; HIRAGANA_NUMBER + KATAKANA_NUMBER],
+            bad_cnts: [0; HIRAGANA_NUMBER + KATAKANA_NUMBER],
         }
     }
 
@@ -82,10 +87,12 @@ impl Components for KanaModel {
                 KanaMessage::TypingRoma(c) => {
                     self.input.push(c);
 
-                    if self.input == self.current_kana.to_romaji() {
+                    if self.input == self.current_kana.0.to_romaji() {
                         if self.display_answer {
                             self.display_answer = false;
+                            self.bad_cnts[self.current_kana.1] += 1;
                         } else {
+                            self.good_cnts[self.current_kana.1] += 1;
                             self.correct += 1;
                         }
                         self.shown += 1;
@@ -166,14 +173,14 @@ impl KanaModel {
             .borders(Borders::ALL);
 
         let stats_block = Block::new()
-            .title("Stats")
+            .title(Line::from(STATS_TITLE).fg(ColorPalette::TITLE).centered())
             .border_type(BorderType::Rounded)
             .borders(Borders::ALL);
 
         let text = vec![
-            Line::from(self.current_kana.clone()),
+            Line::from(self.current_kana.0.clone()),
             if self.display_answer {
-                Line::from(self.current_kana.to_romaji()).fg(ColorPalette::ERROR)
+                Line::from(self.current_kana.0.to_romaji()).fg(ColorPalette::ERROR)
             } else {
                 Line::default()
             },
@@ -182,18 +189,29 @@ impl KanaModel {
 
         let p = Paragraph::new(text).block(block).centered();
 
+        let stats_closure = |(i, u): (usize, &u16)| {
+            format!(
+                "{} {}/{}",
+                String::from_utf16(&[*u]).expect("error"),
+                self.good_cnts[i],
+                self.bad_cnts[i]
+            )
+        };
+
         let stat_text = match self.mode {
-            Mode::Hira => {
-                Text::from_iter(WANTED_HIRAGANA.map(|u| String::from_utf16(&[u]).expect("error")))
-            }
-            Mode::Kata => {
-                Text::from_iter(WANTED_KATAKANA.map(|u| String::from_utf16(&[u]).expect("error")))
-            }
-            Mode::Both => Text::from_iter(
+            Mode::Hira => Text::from_iter(WANTED_HIRAGANA.iter().enumerate().map(stats_closure)),
+            Mode::Kata => Text::from_iter(
                 WANTED_KATAKANA
                     .iter()
-                    .chain(WANTED_HIRAGANA.iter())
-                    .map(|u| String::from_utf16(&[*u]).expect("error")),
+                    .enumerate()
+                    .map(|(i, u)| stats_closure((i + HIRAGANA_NUMBER, u))),
+            ),
+            Mode::Both => Text::from_iter(
+                WANTED_HIRAGANA
+                    .iter()
+                    .chain(WANTED_KATAKANA.iter())
+                    .enumerate()
+                    .map(stats_closure),
             ),
         };
 
@@ -204,9 +222,12 @@ impl KanaModel {
         frame.render_widget(Clear, main_area);
         frame.render_widget(p, main_area);
 
+        frame.render_widget(Clear, stats_area);
         frame.render_widget(stats, stats_area);
         frame.render_stateful_widget(
-            Scrollbar::new(ScrollbarOrientation::VerticalRight),
+            Scrollbar::new(ScrollbarOrientation::VerticalRight)
+                .begin_symbol(Some("╮"))
+                .end_symbol(Some("╯")),
             stats_area,
             &mut self.scroll_state,
         );

@@ -7,12 +7,11 @@ pub mod kana;
 pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
     layout::{Constraint, Flex, Layout, Rect},
-    style::Stylize,
-    style::{palette::tailwind::SLATE, Color, Modifier, Style},
+    style::{palette::tailwind::SLATE, Color, Modifier, Style, Stylize},
     text::{Line, Span, Text},
     widgets::{
-        Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding,
-        Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, Wrap,
+        Bar, BarChart, Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem,
+        ListState, Padding, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, Wrap,
     },
     Frame,
 };
@@ -23,12 +22,11 @@ pub type PlatformKeyEvent = ratatui::crossterm::event::KeyEvent;
 #[cfg(target_arch = "wasm32")]
 pub use ratzilla::ratatui::{
     layout::{Constraint, Flex, Layout},
-    style::Stylize,
-    style::{palette::tailwind::SLATE, Color, Modifier, Style},
+    style::{palette::tailwind::SLATE, Color, Modifier, Style, Stylize},
     text::{Line, Span, Text},
     widgets::{
         Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding,
-        Paragraph, Wrap,
+        Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, Wrap,
     },
     Frame,
 };

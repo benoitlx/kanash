@@ -18,15 +18,23 @@ pub const WANTED_KATAKANA: [u16; KATAKANA_NUMBER] = [
     12530, 12531, 12532,
 ];
 
-pub fn random_hiragana() -> String {
-    String::from_utf16(&[WANTED_HIRAGANA[rand::random_range(0..71)]]).expect("error hiragana")
+pub fn random_hiragana() -> (String, usize) {
+    let index = rand::random_range(0..HIRAGANA_NUMBER);
+    (
+        String::from_utf16(&[WANTED_HIRAGANA[index]]).expect("error hiragana"),
+        index,
+    )
 }
 
-pub fn random_katakana() -> String {
-    String::from_utf16(&[WANTED_KATAKANA[rand::random_range(0..81)]]).expect("error katakana")
+pub fn random_katakana() -> (String, usize) {
+    let index = rand::random_range(0..KATAKANA_NUMBER);
+    (
+        String::from_utf16(&[WANTED_KATAKANA[index]]).expect("error katakana"),
+        index + HIRAGANA_NUMBER,
+    )
 }
 
-pub fn random_kana() -> String {
+pub fn random_kana() -> (String, usize) {
     if rand::random() {
         random_hiragana()
     } else {
