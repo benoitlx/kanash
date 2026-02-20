@@ -48,23 +48,26 @@ impl Components for App {
                     return None;
                 }
 
-                if msg == Message::Home(HomeMessage::Up) || msg == Message::Home(HomeMessage::Down)
-                {
-                    let response = h.update(msg.clone());
-                    return response;
-                }
-
                 // transform self en App::Kana(new_kana(selected)) if msg == Message::Home(Enter)
                 if let Message::Home(HomeMessage::Enter(mode)) = msg {
                     let mut new_kana = KanaModel::new();
 
                     new_kana.mode = mode;
-                    new_kana.update(Message::Kana(KanaMessage::Pass));
+                    match mode {
+                        Mode::Hira => new_kana.scroll_state = ScrollbarState::new(HIRAGANA_NUMBER),
+                        Mode::Kata => new_kana.scroll_state = ScrollbarState::new(KATAKANA_NUMBER),
+                        Mode::Both => {
+                            new_kana.scroll_state =
+                                ScrollbarState::new(HIRAGANA_NUMBER + KATAKANA_NUMBER)
+                        }
+                    }
+                    let response = new_kana.update(Message::Kana(KanaMessage::Pass));
 
                     self.page = AppPage::Kana(new_kana);
+                    return response;
                 }
 
-                None
+                h.update(msg.clone())
             }
             AppPage::Kana(ref mut k) => {
                 let response = k.update(msg.clone());
