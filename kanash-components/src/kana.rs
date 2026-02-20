@@ -23,6 +23,7 @@ pub struct KanaModel {
     display_answer: bool,
     show_help_popup: bool,
     pub mode: Mode,
+    pub scroll_state: ScrollbarState,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -41,6 +42,9 @@ pub enum KanaMessage {
 
     /// Help
     Help,
+
+    ScrollUp,
+    ScrollDown,
 }
 
 impl Components for KanaModel {
@@ -54,6 +58,7 @@ impl Components for KanaModel {
             display_answer: false,
             show_help_popup: false,
             mode: Mode::Hira,
+            scroll_state: ScrollbarState::new(HIRAGANA_NUMBER),
         }
     }
 
@@ -65,13 +70,15 @@ impl Components for KanaModel {
             KeyCode::Char('?') => Some(Message::Kana(KanaMessage::Help)),
             KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
             KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
+            KeyCode::Up => Some(Message::Kana(KanaMessage::ScrollUp)),
+            KeyCode::Down => Some(Message::Kana(KanaMessage::ScrollDown)),
             _ => None,
         }
     }
 
     fn update(&mut self, msg: Message) -> Option<Message> {
         if let Message::Kana(kana_msg) = msg {
-            return match kana_msg {
+            match kana_msg {
                 KanaMessage::TypingRoma(c) => {
                     self.input.push(c);
 
@@ -84,7 +91,6 @@ impl Components for KanaModel {
                         self.shown += 1;
                         return Some(Message::Kana(KanaMessage::Pass));
                     }
-                    None
                 }
                 KanaMessage::Pass => {
                     self.input = String::new();
@@ -93,21 +99,22 @@ impl Components for KanaModel {
                         Mode::Kata => self.current_kana = random_katakana(),
                         Mode::Both => self.current_kana = random_kana(),
                     }
-
-                    None
                 }
                 KanaMessage::Answer => {
                     self.display_answer = true;
                     self.input = String::new();
-                    None
                 }
                 KanaMessage::DeleteRoma => {
                     self.input.pop();
-                    None
                 }
                 KanaMessage::Help => {
                     self.show_help_popup = !self.show_help_popup;
-                    None
+                }
+                KanaMessage::ScrollUp => {
+                    self.scroll_state.prev();
+                }
+                KanaMessage::ScrollDown => {
+                    self.scroll_state.next();
                 }
             };
         }
@@ -125,9 +132,10 @@ impl KanaModel {
             .flex(Flex::Center)
             .areas(frame.area());
 
-        let [main_area] = Layout::horizontal([Constraint::Length(43)])
-            .flex(Flex::Center)
-            .areas(v_area);
+        let [main_area, stats_area] =
+            Layout::horizontal([Constraint::Length(43), Constraint::Length(10)])
+                .flex(Flex::Center)
+                .areas(v_area);
 
         let left_title = Line::from(vec![
             LEFT_TITLE.fg(ColorPalette::SUBTITLE).into(),
@@ -157,6 +165,11 @@ impl KanaModel {
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);
 
+        let stats_block = Block::new()
+            .title("Stats")
+            .border_type(BorderType::Rounded)
+            .borders(Borders::ALL);
+
         let text = vec![
             Line::from(self.current_kana.clone()),
             if self.display_answer {
@@ -169,8 +182,34 @@ impl KanaModel {
 
         let p = Paragraph::new(text).block(block).centered();
 
+        let stat_text = match self.mode {
+            Mode::Hira => {
+                Text::from_iter(WANTED_HIRAGANA.map(|u| String::from_utf16(&[u]).expect("error")))
+            }
+            Mode::Kata => {
+                Text::from_iter(WANTED_KATAKANA.map(|u| String::from_utf16(&[u]).expect("error")))
+            }
+            Mode::Both => Text::from_iter(
+                WANTED_KATAKANA
+                    .iter()
+                    .chain(WANTED_HIRAGANA.iter())
+                    .map(|u| String::from_utf16(&[*u]).expect("error")),
+            ),
+        };
+
+        let stats = Paragraph::new(stat_text)
+            .block(stats_block)
+            .scroll((self.scroll_state.get_position() as u16, 0));
+
         frame.render_widget(Clear, main_area);
         frame.render_widget(p, main_area);
+
+        frame.render_widget(stats, stats_area);
+        frame.render_stateful_widget(
+            Scrollbar::new(ScrollbarOrientation::VerticalRight),
+            stats_area,
+            &mut self.scroll_state,
+        );
 
         if self.show_help_popup {
             help_popup(HELP_STRINGS, 10, 30, frame);

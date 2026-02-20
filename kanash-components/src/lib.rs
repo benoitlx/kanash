@@ -12,7 +12,7 @@ pub use ratatui::{
     text::{Line, Span, Text},
     widgets::{
         Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding,
-        Paragraph, Wrap,
+        Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, Wrap,
     },
     Frame,
 };

@@ -1,10 +1,7 @@
 pub mod ja;
 pub mod rain;
 
-use super::{
-    Block, BorderType, Borders, Clear, Color, ColorPalette, Constraint, Flex, Frame, Layout, Line,
-    Paragraph, Span, Stylize, Text, Wrap,
-};
+use super::*;
 
 pub fn help_popup(help_strings: [&str; 5], max_height: u16, max_width: u16, frame: &mut Frame) {
     let block = Block::new()

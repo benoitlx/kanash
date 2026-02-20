@@ -53,6 +53,14 @@ impl Components for App {
                     let mut new_kana = KanaModel::new();
 
                     new_kana.mode = mode;
+                    match mode {
+                        Mode::Hira => new_kana.scroll_state = ScrollbarState::new(HIRAGANA_NUMBER),
+                        Mode::Kata => new_kana.scroll_state = ScrollbarState::new(KATAKANA_NUMBER),
+                        Mode::Both => {
+                            new_kana.scroll_state =
+                                ScrollbarState::new(HIRAGANA_NUMBER + KATAKANA_NUMBER)
+                        }
+                    }
                     let response = new_kana.update(Message::Kana(KanaMessage::Pass));
 
                     self.page = AppPage::Kana(new_kana);
