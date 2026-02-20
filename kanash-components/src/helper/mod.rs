@@ -30,9 +30,19 @@ fn parse_strings_to_text(strings: [&str; 5]) -> Text<'_> {
     strings
         .into_iter()
         .map(|s| {
+            if s.is_empty() {
+                return Line::default();
+            }
+
+            if !s.contains(" - ") {
+                return Line::from(s).centered();
+            }
+
             let mut sub_strings = s.split(" - ");
+
             let key = Span::from(sub_strings.next().unwrap_or("")).bg(ColorPalette::SELECTION);
             let function = Span::from(sub_strings.next().unwrap_or(""));
+
             Line::from(vec![key, " - ".into(), function]).centered()
         })
         .collect()

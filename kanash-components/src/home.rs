@@ -1,5 +1,3 @@
-use crate::helper::help_popup;
-
 use super::*;
 
 const TITLE: &str = " KANA SH ";

@@ -1,5 +1,3 @@
-// use crate::components::helper::image;
-use crate::helper::ja::*;
 use wana_kana::ConvertJapanese;
 
 use super::*;
@@ -7,7 +5,14 @@ use super::*;
 const TITLE: &str = " Hiragana ";
 const LEFT_TITLE: &str = " Shown: ";
 const RIGHT_TITLE: &str = " Correct: ";
-const KEY_HELPER: &str = " Main Menu <Esc> | Show answer <Space> ";
+const KEY_HELPER: &str = " ? ";
+const HELP_STRINGS: [&str; 5] = [
+    "Type the corresponding romaji. Good answers are logged automaticaly.",
+    "",
+    "? - toggle this popup",
+    "esc - go back to main menu",
+    "space - reveal answer",
+];
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct KanaModel {
@@ -16,6 +21,7 @@ pub struct KanaModel {
     input: String,
     current_kana: String,
     display_answer: bool,
+    show_help_popup: bool,
     pub mode: Mode,
 }
 
@@ -30,8 +36,11 @@ pub enum KanaMessage {
     /// Delete roma
     DeleteRoma,
 
-    /// Pass,
+    /// Pass
     Pass,
+
+    /// Help
+    Help,
 }
 
 impl Components for KanaModel {
@@ -43,6 +52,7 @@ impl Components for KanaModel {
             input: String::new(),
             current_kana: random_kana(),
             display_answer: false,
+            show_help_popup: false,
             mode: Mode::Hira,
         }
     }
@@ -52,6 +62,7 @@ impl Components for KanaModel {
         match key_event.code {
             KeyCode::Esc => Some(Message::Back),
             KeyCode::Backspace => Some(Message::Kana(KanaMessage::DeleteRoma)),
+            KeyCode::Char('?') => Some(Message::Kana(KanaMessage::Help)),
             KeyCode::Char(' ') => Some(Message::Kana(KanaMessage::Answer)),
             KeyCode::Char(c) => Some(Message::Kana(KanaMessage::TypingRoma(c))),
             _ => None,
@@ -94,6 +105,10 @@ impl Components for KanaModel {
                     self.input.pop();
                     None
                 }
+                KanaMessage::Help => {
+                    self.show_help_popup = !self.show_help_popup;
+                    None
+                }
             };
         }
         None
@@ -106,19 +121,13 @@ impl Components for KanaModel {
 
 impl KanaModel {
     fn learning_zone(&mut self, frame: &mut Frame) {
-        let [_, v_area, _] = Layout::vertical([
-            Constraint::Min(0),
-            Constraint::Length(7),
-            Constraint::Min(0),
-        ])
-        .areas(frame.area());
+        let [v_area] = Layout::vertical([Constraint::Length(7)])
+            .flex(Flex::Center)
+            .areas(frame.area());
 
-        let [_, main_area, _] = Layout::horizontal([
-            Constraint::Min(0),
-            Constraint::Length(43),
-            Constraint::Min(0),
-        ])
-        .areas(v_area);
+        let [main_area] = Layout::horizontal([Constraint::Length(43)])
+            .flex(Flex::Center)
+            .areas(v_area);
 
         let left_title = Line::from(vec![
             LEFT_TITLE.fg(ColorPalette::SUBTITLE).into(),
@@ -162,5 +171,9 @@ impl KanaModel {
 
         frame.render_widget(Clear, main_area);
         frame.render_widget(p, main_area);
+
+        if self.show_help_popup {
+            help_popup(HELP_STRINGS, 10, 30, frame);
+        }
     }
 }

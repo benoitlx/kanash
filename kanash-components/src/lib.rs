@@ -41,6 +41,7 @@ pub use ratzilla::{event::KeyCode, web_sys::console};
 
 use std::time::Duration;
 
+use helper::{help_popup, ja::*};
 use home::{HomeMessage, Mode};
 use kana::KanaMessage;
 
