@@ -129,21 +129,26 @@ impl Components for KanaModel {
     }
 
     fn view(&mut self, frame: &mut Frame, _elapsed: Duration) {
-        self.learning_zone(frame);
-    }
-}
-
-impl KanaModel {
-    fn learning_zone(&mut self, frame: &mut Frame) {
         let [v_area] = Layout::vertical([Constraint::Length(7)])
             .flex(Flex::Center)
             .areas(frame.area());
 
-        let [main_area, stats_area] =
+        let [learning_area, stats_area] =
             Layout::horizontal([Constraint::Length(43), Constraint::Length(10)])
                 .flex(Flex::Center)
                 .areas(v_area);
 
+        self.learning_zone(frame, learning_area);
+        self.stats_zone(frame, stats_area);
+
+        if self.show_help_popup {
+            help_popup(HELP_STRINGS, 10, 30, frame);
+        }
+    }
+}
+
+impl KanaModel {
+    fn learning_zone(&mut self, frame: &mut Frame, area: Rect) {
         let left_title = Line::from(vec![
             LEFT_TITLE.fg(ColorPalette::SUBTITLE).into(),
             self.shown.to_string().yellow(),
@@ -172,11 +177,6 @@ impl KanaModel {
             .padding(Padding::vertical(1))
             .borders(Borders::ALL);
 
-        let stats_block = Block::new()
-            .title(Line::from(STATS_TITLE).fg(ColorPalette::TITLE).centered())
-            .border_type(BorderType::Rounded)
-            .borders(Borders::ALL);
-
         let text = vec![
             Line::from(self.current_kana.0.clone()),
             if self.display_answer {
@@ -188,6 +188,16 @@ impl KanaModel {
         ];
 
         let p = Paragraph::new(text).block(block).centered();
+
+        frame.render_widget(Clear, area);
+        frame.render_widget(p, area);
+    }
+
+    fn stats_zone(&mut self, frame: &mut Frame, area: Rect) {
+        let stats_block = Block::new()
+            .title(Line::from(STATS_TITLE).fg(ColorPalette::TITLE).centered())
+            .border_type(BorderType::Rounded)
+            .borders(Borders::ALL);
 
         let stats_closure = |(i, u): (usize, &u16)| {
             format!(
@@ -219,21 +229,14 @@ impl KanaModel {
             .block(stats_block)
             .scroll((self.scroll_state.get_position() as u16, 0));
 
-        frame.render_widget(Clear, main_area);
-        frame.render_widget(p, main_area);
-
-        frame.render_widget(Clear, stats_area);
-        frame.render_widget(stats, stats_area);
+        frame.render_widget(Clear, area);
+        frame.render_widget(stats, area);
         frame.render_stateful_widget(
             Scrollbar::new(ScrollbarOrientation::VerticalRight)
                 .begin_symbol(Some("╮"))
                 .end_symbol(Some("╯")),
-            stats_area,
+            area,
             &mut self.scroll_state,
         );
-
-        if self.show_help_popup {
-            help_popup(HELP_STRINGS, 10, 30, frame);
-        }
     }
 }

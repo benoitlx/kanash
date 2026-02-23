@@ -21,7 +21,7 @@ pub type PlatformKeyEvent = ratatui::crossterm::event::KeyEvent;
 
 #[cfg(target_arch = "wasm32")]
 pub use ratzilla::ratatui::{
-    layout::{Constraint, Flex, Layout},
+    layout::{Constraint, Flex, Layout, Rect},
     style::{palette::tailwind::SLATE, Color, Modifier, Style, Stylize},
     text::{Line, Span, Text},
     widgets::{
