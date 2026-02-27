@@ -25,8 +25,9 @@ pub struct KanaModel {
     show_help_popup: bool,
     pub mode: Mode,
     pub scroll_state: ScrollbarState,
-    good_cnts: [usize; HIRAGANA_NUMBER + KATAKANA_NUMBER],
-    bad_cnts: [usize; HIRAGANA_NUMBER + KATAKANA_NUMBER],
+    good_cnts: [usize; HIRAGANA_NUMBER],
+    bad_cnts: [usize; HIRAGANA_NUMBER],
+    kana_permutation: Vec<usize>,
 }
 
 #[derive(Debug, PartialEq, Eq, Clone, Copy)]
@@ -62,8 +63,9 @@ impl Components for KanaModel {
             show_help_popup: false,
             mode: Mode::Hira,
             scroll_state: ScrollbarState::new(HIRAGANA_NUMBER),
-            good_cnts: [0; HIRAGANA_NUMBER + KATAKANA_NUMBER],
-            bad_cnts: [0; HIRAGANA_NUMBER + KATAKANA_NUMBER],
+            good_cnts: [0; HIRAGANA_NUMBER],
+            bad_cnts: [0; HIRAGANA_NUMBER],
+            kana_permutation: (0..(HIRAGANA_NUMBER)).collect(),
         }
     }
 
@@ -88,6 +90,7 @@ impl Components for KanaModel {
                     self.input.push(c);
 
                     if self.input == self.current_kana.0.to_romaji() {
+                        self.kana_permutation[..=self.current_kana.1].rotate_right(1);
                         if self.display_answer {
                             self.display_answer = false;
                             self.bad_cnts[self.current_kana.1] += 1;
@@ -199,31 +202,42 @@ impl KanaModel {
             .border_type(BorderType::Rounded)
             .borders(Borders::ALL);
 
-        let stats_closure = |(i, u): (usize, &u16)| {
+        // let stats_closure = |(i, u): (usize, &u16)| {
+        //     format!(
+        //         "{} {}/{}",
+        //         String::from_utf16(&[WANTED_HIRAGANA[self.kana_permutation[i]]]).expect("error"),
+        //         self.good_cnts[self.kana_permutation[i]],
+        //         self.bad_cnts[self.kana_permutation[i]]
+        //     )
+        // };
+
+        // let stat_text = match self.mode {
+        //     Mode::Hira => Text::from_iter(WANTED_HIRAGANA.iter().enumerate().map(stats_closure)),
+        //     Mode::Kata => Text::from_iter(
+        //         WANTED_KATAKANA
+        //             .iter()
+        //             .enumerate()
+        //             .map(|(i, u)| stats_closure((i + HIRAGANA_NUMBER, u))),
+        //     ),
+        //     Mode::Both => Text::from_iter(
+        //         WANTED_HIRAGANA
+        //             .iter()
+        //             .chain(WANTED_KATAKANA.iter())
+        //             .enumerate()
+        //             .map(stats_closure),
+        //     ),
+        // };
+
+        let stats_closure = |i: &usize| {
             format!(
-                "{} {}/{}",
-                String::from_utf16(&[*u]).expect("error"),
-                self.good_cnts[i],
-                self.bad_cnts[i]
+                "{i}{} {} {}",
+                String::from_utf16(&[WANTED_HIRAGANA[*i]]).expect("err"),
+                self.good_cnts[*i],
+                self.bad_cnts[*i],
             )
         };
 
-        let stat_text = match self.mode {
-            Mode::Hira => Text::from_iter(WANTED_HIRAGANA.iter().enumerate().map(stats_closure)),
-            Mode::Kata => Text::from_iter(
-                WANTED_KATAKANA
-                    .iter()
-                    .enumerate()
-                    .map(|(i, u)| stats_closure((i + HIRAGANA_NUMBER, u))),
-            ),
-            Mode::Both => Text::from_iter(
-                WANTED_HIRAGANA
-                    .iter()
-                    .chain(WANTED_KATAKANA.iter())
-                    .enumerate()
-                    .map(stats_closure),
-            ),
-        };
+        let stat_text = Text::from_iter(self.kana_permutation.iter().map(stats_closure));
 
         let stats = Paragraph::new(stat_text)
             .block(stats_block)
