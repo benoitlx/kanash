@@ -6,12 +6,13 @@ pub mod kana;
 #[cfg(not(target_arch = "wasm32"))]
 pub use ratatui::{
     crossterm::event::{self, Event, KeyCode},
-    layout::{Constraint, Layout},
-    style::Stylize,
-    style::{palette::tailwind::SLATE, Color, Modifier, Style},
-    text::Line,
-    widgets::{Block, Paragraph},
-    widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
+    layout::{Constraint, Flex, Layout, Rect},
+    style::{palette::tailwind::SLATE, Color, Modifier, Style, Stylize},
+    text::{Line, Span, Text},
+    widgets::{
+        Bar, BarChart, Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem,
+        ListState, Padding, Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, Wrap,
+    },
     Frame,
 };
 
@@ -20,12 +21,13 @@ pub type PlatformKeyEvent = ratatui::crossterm::event::KeyEvent;
 
 #[cfg(target_arch = "wasm32")]
 pub use ratzilla::ratatui::{
-    layout::{Constraint, Layout},
-    style::Stylize,
-    style::{palette::tailwind::SLATE, Color, Modifier, Style},
-    text::Line,
-    widgets::{Block, Paragraph},
-    widgets::{BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding},
+    layout::{Constraint, Flex, Layout, Rect},
+    style::{palette::tailwind::SLATE, Color, Modifier, Style, Stylize},
+    text::{Line, Span, Text},
+    widgets::{
+        Block, BorderType, Borders, Clear, HighlightSpacing, List, ListItem, ListState, Padding,
+        Paragraph, Scrollbar, ScrollbarOrientation, ScrollbarState, Wrap,
+    },
     Frame,
 };
 
@@ -37,6 +39,7 @@ pub use ratzilla::{event::KeyCode, web_sys::console};
 
 use std::time::Duration;
 
+use helper::{help_popup, ja::*};
 use home::{HomeMessage, Mode};
 use kana::KanaMessage;
 
