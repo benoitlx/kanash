@@ -26,13 +26,13 @@ paru -S kanash
 To expose it as a website:
 
 ```
-sudo docker run --rm -p 80:80 blximages/kanash:kanash-ratzilla-v0.1.6
+docker run --rm -p 80:80 blximages/kanash:kanash-ratzilla-v0.1.6
 ```
 
 To run it directly in your terminal:
 
 ```
-sudo docker run --rm -it --entrypoint=/usr/bin/kanash blximages/kanash
+docker run --rm -it --entrypoint=/usr/bin/kanash blximages/kanash
 ```
 
 ### WASM build
