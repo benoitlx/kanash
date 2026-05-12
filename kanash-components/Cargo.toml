@@ -10,7 +10,7 @@ keywords = ["ratatui", "learning", "japanese", "TUI"]
 
 [dependencies]
 rand = "0.10.0"
-wana_kana = "4.0.0"
+wana_kana = "5.0.0"
 tui-rain = { git = "https://github.com/SuperJappie08/tui-rain.git", branch = "ratatui-0.30.0" }
 
 [target.'cfg(target_arch = "wasm32")'.dependencies]
